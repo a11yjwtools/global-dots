@@ -102,7 +102,20 @@ kbd{font-family:ui-monospace,Consolas,monospace;font-size:.76rem;border:1px soli
 .strip{min-height:170px;border-radius:18px;padding:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;background:var(--tint);border:2px dashed var(--line)}
 .strip.has{border-style:solid;border-color:var(--royal-soft)}
 .chip{display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 12px;cursor:pointer;box-shadow:0 1px 2px rgba(13,26,56,.06)}
-.chip:hover{border-color:var(--bad)}
+.chip:hover{border-color:var(--royal)}
+.chip.sel{border-color:var(--royal);background:var(--royal-soft);box-shadow:0 0 0 3px var(--royal)}
+.chip.sp.sel{background:var(--royal-soft)}
+.selbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.selcount{font-size:.9rem;color:var(--muted);margin-right:auto}
+.sentence .alts{color:var(--muted);font-weight:500;font-size:.62em}
+.meanings{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.meanings .eyebrow{margin:0 0 10px}
+.meanings ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.meanings .or{color:var(--muted);font-size:.85rem}
+.meanings li{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.mopt{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 14px;font-family:var(--display);font-weight:600;cursor:pointer}
+.mopt[aria-pressed="true"]{background:var(--royal);border-color:var(--royal);color:var(--royal-ink)}
+.mhint{font-size:.82rem;color:var(--muted);margin:10px 0 0}
 .chip.sp{width:36px;align-self:stretch;border-style:dashed;background:transparent;box-shadow:none}
 .empty{color:var(--muted);font-size:1.1rem}
 .go{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-top:18px}
@@ -169,6 +182,34 @@ td.dots{font-size:.92rem;color:var(--muted);white-space:nowrap}
 details summary{cursor:pointer;font-family:var(--display);font-weight:600}
 .savebar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin:0 0 16px;padding:12px 16px;border-radius:14px;background:var(--gold-soft);border:1px solid var(--gold);color:var(--ink);font-weight:700}
 footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 24px}
+/* phone: Your symbols right above Build a cell */
+@media (max-width:600px){
+  .tx{display:flex;flex-direction:column;gap:14px}
+  .tx>.card.outcard{display:contents}
+  .outcard>.eyebrow{order:1;margin:0}
+  .outcard>#inputwin{order:2;min-height:96px;padding:12px;gap:8px}
+  .outcard>#selBar{order:3;margin-top:0}
+  .tx>.card.pad{order:4;padding:16px;gap:12px}
+  .outcard>.go{order:5;margin-top:0}
+  .outcard>.result{order:6;margin-top:0}
+  .pad>.eyebrow,.pad>.hint{display:none}
+  .pad .dot{width:62px;height:62px}
+  .pad .bigcell{gap:12px 30px;padding:16px 28px;border-radius:22px}
+  .pad .preview{font-size:1rem;min-height:1.2em}
+  .pad .btn{font-size:1rem;padding:10px 16px}
+  .chip{padding:8px}
+  .chip .cg{width:30px;height:40px}
+  .chip.sp{width:24px}
+  .answer{padding:20px}
+  .band{padding-block:14px 64px}
+  .band .wrap{gap:12px}
+  .tagline{display:none}
+  .logo{width:44px;height:44px;border-radius:12px}
+  main{margin-top:-50px}
+  .selbar{gap:6px}
+  .selbar .btn{padding:5px 9px;font-size:.8rem}
+  .selcount{width:100%;margin:0}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -214,6 +255,13 @@ footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 2
     <div class="card outcard">
       <p class="eyebrow">Your symbols</p>
       <div class="strip" id="inputwin"></div>
+      <div class="selbar" id="selBar" hidden>
+        <span class="selcount" id="selCount">Tap symbols to select them</span>
+        <button class="btn small" id="selAll">Select all</button>
+        <button class="btn small gold" id="selCopy" disabled>Copy next to them</button>
+        <button class="btn small ghost danger" id="selDel" disabled>Delete</button>
+        <button class="btn small ghost" id="selNone" disabled>Deselect</button>
+      </div>
       <div class="go">
         <div class="field" style="flex:1 1 200px">
           <label for="langSel">Translate into</label>
@@ -533,19 +581,49 @@ function paintCell(host, mask) { host.querySelectorAll('.dot').forEach(b => b.se
 buildCell($('bigcell'), () => cur, m => { cur = m; renderCell(); });
 buildCell($('minicell'), () => mCur, m => { mCur = m; paintCell($('minicell'), mCur); });
 function renderCell() { paintCell($('bigcell'), cur); $('cellPreview').textContent = cur ? 'Dots ' + [...dotsOf(toChar(cur))].join(' · ') : 'Tap the dots to raise them'; }
-function addCell() { if (!cur) { addSpace(); return; } input.push(toChar(cur)); cur = 0; renderCell(); renderInput(); }
-function addSpace() { if (input.length && input[input.length - 1] !== ' ') input.push(' '); renderInput(); }
+let selected = new Set(), anchor = null, choice = {};
+function addCell() { if (!cur) { addSpace(); return; } input.push(toChar(cur)); cur = 0; selected.clear(); renderCell(); renderInput(); }
+function addSpace() { if (input.length && input[input.length - 1] !== ' ') input.push(' '); selected.clear(); renderInput(); }
 function renderInput() {
+  choice = {};
   const w = $('inputwin'); w.classList.toggle('has', input.length > 0);
-  if (!input.length) { w.innerHTML = '<span class="empty">Raise dots in the cell, then press <b>Add cell</b>. Your symbols line up here.</span>'; return; }
-  w.innerHTML = input.map((c, i) => c === ' ' ? `<button class="chip sp" data-i="${i}" aria-label="Word space, click to remove"></button>`
-    : `<button class="chip" data-i="${i}" aria-label="Cell with dots ${dotsOf(c)}, click to remove" title="Dots ${dotsOf(c)} · click to remove">${cellSVG(c, 54)}</button>`).join('');
+  $('selBar').hidden = !input.length;
+  if (!input.length) { selected.clear(); w.innerHTML = '<span class="empty">Raise dots in the cell, then press <b>Add cell</b>. Your symbols line up here.</span>'; renderSelBar(); return; }
+  w.innerHTML = input.map((c, i) => {
+    const sel = selected.has(i);
+    return c === ' ' ? `<button class="chip sp${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="Word space${sel ? ', selected' : ''}" title="Word space · tap to select"></button>`
+      : `<button class="chip${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="Cell with dots ${dotsOf(c)}${sel ? ', selected' : ''}" title="Dots ${dotsOf(c)} · tap to select">${cellSVG(c, 54)}</button>`;
+  }).join('');
+  renderSelBar();
 }
-$('inputwin').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; input.splice(+b.dataset.i, 1); renderInput(); });
+function renderSelBar() {
+  const n = selected.size;
+  $('selCount').textContent = n ? `${n} selected` : 'Tap symbols to select them';
+  $('selCopy').disabled = $('selDel').disabled = $('selNone').disabled = !n;
+  $('selAll').disabled = !input.length || n === input.length;
+}
+$('inputwin').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  const i = +b.dataset.i;
+  if (e.shiftKey && anchor !== null) { const [a, z] = [Math.min(anchor, i), Math.max(anchor, i)]; for (let k = a; k <= z; k++) selected.add(k); }
+  else { selected.has(i) ? selected.delete(i) : selected.add(i); anchor = i; }
+  renderInput();
+});
+$('selAll').onclick = () => { input.forEach((_, i) => selected.add(i)); renderInput(); };
+$('selNone').onclick = () => { selected.clear(); anchor = null; renderInput(); };
+$('selDel').onclick = () => { input = input.filter((_, i) => !selected.has(i)); selected.clear(); anchor = null; renderInput(); };
+$('selCopy').onclick = () => {
+  const idx = [...selected].sort((a, b) => a - b); if (!idx.length) return;
+  const block = idx.map(i => input[i]), at = idx[idx.length - 1] + 1;
+  input.splice(at, 0, ...block);
+  selected = new Set(block.map((_, k) => at + k)); anchor = at;
+  renderInput();
+};
 $('addCell').onclick = addCell; $('addSpace').onclick = addSpace;
-$('backspace').onclick = () => { if (cur) { cur = 0; renderCell(); } else { input.pop(); renderInput(); } };
-$('clearAll').onclick = () => { input = []; cur = 0; renderCell(); renderInput(); $('result').innerHTML = ''; };
+$('backspace').onclick = () => { if (cur) { cur = 0; renderCell(); } else if (selected.size) { $('selDel').click(); } else { input.pop(); renderInput(); } };
+$('clearAll').onclick = () => { input = []; cur = 0; selected.clear(); anchor = null; renderCell(); renderInput(); $('result').innerHTML = ''; };
 $('translateBtn').onclick = translate;
+$('result').addEventListener('click', e => { const b = e.target.closest('.mopt'); if (!b) return; choice[+b.dataset.seg] = +b.dataset.k; const keep = choice; translate(); choice = keep; });
 document.addEventListener('keydown', e => {
   if ($('view-translate').hidden) return;
   const t = e.target;
@@ -556,31 +634,40 @@ document.addEventListener('keydown', e => {
   else if (e.key === ' ') { addCell(); e.preventDefault(); }
   else if (e.key === 'Backspace') { $('backspace').click(); e.preventDefault(); }
   else if (e.key === 'Enter') { translate(); e.preventDefault(); }
+  else if (e.key === 'Escape' && selected.size) { $('selNone').click(); e.preventDefault(); }
 });
 function translate() {
   if (cur) addCell();
   const lang = $('langSel').value || 'E', str = input.join('').trim(), out = $('result');
   if (!str) { out.innerHTML = '<p class="note">Build at least one cell first.</p>'; return; }
-  let sentence = '', rows = '', missing = 0, unknown = 0;
-  for (const s of segment(str)) {
+  let sentence = '', rows = '', missing = 0, unknown = 0, multi = '';
+  const segs = segment(str);
+  segs.forEach((s, si) => {
     let piece, cls = '', en, status;
     if (s.number) { piece = s.number; en = 'number ' + s.number; status = '<span class="pill ok">number</span>'; }
     else if (s.unknown) { piece = '?'; cls = 'unk'; unknown++; en = '—'; status = '<span class="pill bad">not in the system</span>'; }
     else {
-      const v = vern(s.syms[0], lang); piece = v.text; if (!v.ok) { cls = 'miss'; missing++; }
+      const pick = Math.min(choice[si] || 0, s.syms.length - 1);
+      const v = vern(s.syms[pick], lang); piece = v.text; if (!v.ok) { cls = 'miss'; missing++; }
+      if (s.syms.length > 1) {
+        const opts = s.syms.map((x, k) => { const vx = vern(x, lang); return `<button class="mopt" data-seg="${si}" data-k="${k}" aria-pressed="${k === pick}">${esc(vx.text)}</button>`; }).join('<span class="or">or</span>');
+        multi += `<li>${cellsSVG(s.code, 30)}${opts}</li>`;
+      }
       en = s.syms.map(x => esc(x.english)).join(' <span style="color:var(--muted)">or</span> ');
       status = v.ok ? '<span class="pill ok">found</span>' : `<span class="pill warn">no ${esc(langName(lang))} yet</span>`;
       if (s.syms.length > 1) status += ' <span class="pill warn">' + s.syms.length + ' meanings</span>';
     }
     const isP = s.syms && s.syms[0].category === 'punctuation';
-    sentence += (sentence && !isP ? ' ' : '') + (cls ? `<span class="${cls}">${esc(piece)}</span>` : esc(piece));
+    let shown = cls ? `<span class="${cls}">${esc(piece)}</span>` : esc(piece);
+    if (s.syms && s.syms.length > 1) { const pick = Math.min(choice[si] || 0, s.syms.length - 1); shown += `<span class="alts"> (${s.syms.filter((_, k) => k !== pick).map(x => esc(vern(x, lang).text)).join(' / ')})</span>`; }
+    sentence += (sentence && !isP ? ' ' : '') + shown;
     const vtext = s.syms ? s.syms.map(x => { const v = vern(x, lang); return v.ok ? esc(v.text) : `<i style="color:var(--warn)">${esc(x.english)}</i>`; }).join(' / ') : esc(piece);
     rows += `<tr><td>${cellsSVG(s.code, 36)}</td><td class="dots">${esc(dotsStr(s.code))}</td><td>${en}</td><td><b>${vtext}</b></td><td>${status}</td></tr>`;
-  }
+  });
   let notes = '';
   if (missing) notes += `<p class="note warn">${missing} symbol${missing > 1 ? 's have' : ' has'} no ${esc(langName(lang))} translation yet, so ${missing > 1 ? 'they are' : 'it is'} shown in English, in italics.</p>`;
   if (unknown) notes += `<p class="note bad">${unknown} cell${unknown > 1 ? 's are' : ' is'} not part of any symbol in the system.</p>`;
-  out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(langName(lang))}</span><p class="sentence">${sentence}</p></div>${notes ? `<div class="notes">${notes}</div>` : ''}
+  out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(langName(lang))}</span><p class="sentence">${sentence}</p>${multi ? `<div class="meanings"><p class="eyebrow">Symbols with several meanings</p><ul>${multi}</ul><p class="mhint">Tap a meaning to use it in the sentence.</p></div>` : ''}</div>${notes ? `<div class="notes">${notes}</div>` : ''}
     <div class="tablewrap"><table><thead><tr><th>Cells</th><th>Dots</th><th>English</th><th>${esc(langName(lang))}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
