@@ -258,7 +258,7 @@ footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 2
       <div class="selbar" id="selBar" hidden>
         <span class="selcount" id="selCount">Tap symbols to select them</span>
         <button class="btn small" id="selAll">Select all</button>
-        <button class="btn small gold" id="selCopy" disabled>Copy next to them</button>
+        <button class="btn small gold" id="selCopy" disabled title="Add a copy of the selected symbols at the end">Repeat</button>
         <button class="btn small ghost danger" id="selDel" disabled>Delete</button>
         <button class="btn small ghost" id="selNone" disabled>Deselect</button>
       </div>
@@ -614,10 +614,9 @@ $('selNone').onclick = () => { selected.clear(); anchor = null; renderInput(); }
 $('selDel').onclick = () => { input = input.filter((_, i) => !selected.has(i)); selected.clear(); anchor = null; renderInput(); };
 $('selCopy').onclick = () => {
   const idx = [...selected].sort((a, b) => a - b); if (!idx.length) return;
-  const block = idx.map(i => input[i]), at = idx[idx.length - 1] + 1;
-  input.splice(at, 0, ...block);
-  selected = new Set(block.map((_, k) => at + k)); anchor = at;
+  input.push(...idx.map(i => input[i]));   // paste at the end; the selection stays so it can be repeated again
   renderInput();
+  const w = $('inputwin'); w.scrollTop = w.scrollHeight;
 };
 $('addCell').onclick = addCell; $('addSpace').onclick = addSpace;
 $('backspace').onclick = () => { if (cur) { cur = 0; renderCell(); } else if (selected.size) { $('selDel').click(); } else { input.pop(); renderInput(); } };
