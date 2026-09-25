@@ -1,0 +1,19 @@
+# Sample Custom Language Dictionary (Language Code: X)
+# Form: English Word = Translated Word
+# Add your translations below for Language X.
+# You can duplicate this folder to create any new language (e.g. F for French, P for Portuguese, etc.)
+
+Jehovah = Jehovah-X
+Jesus = Jesus-X
+people = people-X
+love = love-X
+good = good-X
+bad = bad-X
+Satan = Satan-X
+Heaven = Heaven-X
+earth = earth-X
+pray = pray-X
+happy = happy-X
+Jehovah's Witnesses = Jehovah's Witnesses-X
+Kingdom Hall = Kingdom Hall-X
+go = go-X

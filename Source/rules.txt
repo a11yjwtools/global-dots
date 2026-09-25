@@ -1,0 +1,902 @@
+﻿# ENGLISH RULES
+
+# *****
+# NOTES
+# *****
+#	1. Always open this file in NOTEPAD++ with Word wrap on.
+#	2. A number sign (#) at the start of a line means that everything on that line is a COMMENT. That line will be ignored by WTS.
+#	3. See PPD for how rules are formatted and best practices: https://jwsite.sharepoint.com/sites/whq-wrt-ppd-translation-computer-support/SitePages/software-administration/wts/workspaces/braille-configuration-files/rules-basics.aspx
+
+# =========================
+# FORMATTING FOR RULES FILE
+# =========================
+# To keep the rules file organized, please format sections in this general method:
+
+#	[Three blank lines before]
+#	*******
+#	LEVEL 1
+#	*******
+#
+#	[Two blank lines before]
+#	=======
+#	LEVEL 2
+#	=======
+#
+#	[One blank line before]
+#	-------
+#	LEVEL 3
+#	-------
+#
+#	[One blank line before]
+#	Level 4
+#	-------
+#
+#	NOTE: [Only one point]
+#
+#	NOTES:
+#		1.
+#		2.
+
+# You can use other methods to organize the rules as necessary. But make sure to be consistent.
+
+# ********
+# CONTENTS
+# ********
+# UEB = Rules of Unified English Braille
+
+# SECTION 1: WILD CARDS
+# SECTION 2: INPUT CLASSES
+#				6, 7: Scripture State
+#				3, 4: Letter Mode
+# SECTION 3: NUMBERS
+#				Multi-digit Numbers
+#				Number Exceptions
+#				Number Set
+# SECTION 4: GRADE 2 ENGLISH
+#				[1] → CONTROL / META
+#				[2] → RESERVED
+#				[3] → ROLE SHIFT & QUOTING
+#				[4] → CLASSIFIER MODE & FAMILIES
+#				[5] → ASPECT / MORPHOLOGY
+#				[6] → DISCOURSE / SEGMENTATION
+#				[7] → EXPANSION PREFIXES
+#				[8] → RESERVED
+#				[9] → NON-MANUAL MARKERS (NMM)
+#				[16] → PRONOUNS & DEIXIS
+#				[17] → QUESTION WORDS (WH)
+#				[18] → DETERMINERS & DEMONSTRATIVES
+#				[19] → POLARITY
+#				[20] → MODAL / ATTITUDE
+#				[21] → TIME & TEMPORAL
+#				[22] → SPATIAL RELATIONS / PREPOSITIONS
+#				[23] → MOTION / PATH VERBS
+#				[24] → MENTAL & COMMUNICATION VERBS
+#				[25] → DAILY / GENERAL VERBS
+#				[26] → CORE NOUNS
+#				[27] → ADDITIONAL NOUNS
+#				[28] → NUMBERS (0–63)
+#				[29] → ADJECTIVES & COLORS
+#				[30] → QUANTIFIERS & DEGREE
+#				[31] → CONNECTIVES & DISCOURSE
+#				[32] → EVALUATION / EMOTION
+# SECTION 6: PUNCTUATION
+#				Apostrophe
+#				Brackets
+#				Colon
+#				Comma
+#				Dash
+#				Ellipses Symbol
+#				Exclamation Point
+#				Hyphen
+#				Parentheses
+#				Period, Full Stop
+#				Prime Mark
+#				Question Mark
+#				Quotes
+#				Semi-colon
+#				Stress Mark
+#				Syllable Separator
+# SECTION 8: BLANK SPACE CHARACTERS
+
+
+
+# *********************
+# SECTION 1: WILD CARDS
+# *********************
+# NOTES:
+#	1. Wild cards are symbols used in the LEFT and RIGHT of the focus. They are not used in the focus or the output.
+#	2. They represent a class of items, such as any punctuation, letter, number, etc.
+#	3. List of wild cards symbols:
+#  !  = letter
+#  #  = digit
+#  ~  = blank space, punctuation, decoration, capitalization, range boundary
+#     = blank space or capitalization
+#  |  = one or more capitalization signs
+#  %  = one or more decoration signs (italic, bold, underscore)
+#  &  = one or more punctuation signs
+#  ;  = one or more letters
+#  +  = one or more digits
+#  `  = one or more Roman numerals
+#  \  = escape wildcard (the wildcard that comes after the escape symbol is read as the literal character and not as a wildcard)
+#  glue space = [ ] (copy what is between the brackets)
+
+# ==============================
+# <NO-LINE-BREAK-ALLOWED> SYMBOL
+# ==============================
+# NOTES:
+#	1. The <no-line-break-allowed> symbol is used together with <line-break-sequences> in the styles.xml. See https://jwsite.sharepoint.com/sites/whq-wrt-ppd-translation-computer-support/SitePages/software-administration/wts/workspaces/braille-configuration-files/line-break-sequences.aspx
+#	2. The <no-line-break-allowed> symbol is used only on the OUTPUT side of a rule.
+#	3. Using the symbol will glue together output characters that are normally allowed to break across a line, but need to stay together on the same line in certain circumstances.
+#	4. The <no-line-break-allowed> symbol is a vertical bar by default: |
+#		Example:
+#			1 #[-]#=|-| -
+#		The example rule makes numbers that are connected with a hyphen not break across lines.
+
+
+
+# ********************************
+# SECTION 2: INPUT CLASSES
+# ********************************
+# 1 = Grade 1 Braille
+# 2 = Grade 2 Braille
+# 3 = Letter Mode Grade 2
+# 4 = Letter Mode Grade 1
+# 5 = Computer Braille Grade 2
+# 6 = Grade 2 Scripture State
+# 7 = Grade 1 Scripture State
+# 8 = Computer Braille Grade 1
+
+# VERY IMPORTANT!!!
+# Always place Grade 2 rules (6) ahead of Grade 1 rules (7) when both grades of braille are used in your language. Since both grades are run from the same rules file, the transcription program will automatically search for Grade 1 rules first, unless the Grade 2 rules are placed ahead of Grade 1.
+
+# ===============
+# SCRIPTURE STATE
+# ===============
+# Grade 2 Scripture State: 6
+# Grade 1 Scripture State: 7
+
+# NOTES:
+#	1. For Grade 2 languages, if a rule is not specifically listed in Input Class 6, WTS defaults to Input Class 2 rules, then Input Class 1 rules.
+#	2. For Grade 1 languages, if a rule is not specifically listed in Input Class 7, WTS defaults to Input Class 1 rules.
+#	3. Rules in this section are only needed if:
+#		a) numbers in the Scripture State do NOT need a number sign following a punctuation mark, or
+#		b) punctuation symbols in the Scripture State appear or function differently than those in the PUNCTUATION section.
+#	4. Add Grade 2 (Input Class 6) rules if vernacular uses Grade 2.
+#	5. Add or adjust rules as needed.
+
+# ---------------------
+# BEGIN SCRIPTURE STATE
+# ---------------------
+2 [<<]= 6
+1 [<<]= 7
+
+# -------------------
+# END SCRIPTURE STATE
+# -------------------
+6 [>>]= 2
+7 [>>]= 1
+
+# PLEASE NOTE:
+#   1. Ending punctuation must be OUTSIDE the << >>. [e.g. <<John 8:32>>.]
+#   2. The transcription program places punctuation outside << >> automatically.
+#   3. However, A and B parts must be inside the << >>.
+#   4. If you copy and paste information with scriptures in it into an editor document, you must insert << >> manually to make the scriptures transcribe correctly.
+
+# ------------------------------------------
+# REMOVE COLON IN SCRIPTURES (Matthew 24:14)
+# ------------------------------------------
+6 [:]= -
+7 [:]= -
+
+# ------------------------------------------
+# SPANNING CHAPTERS (Psalms 69–73) [EN dash]
+# ------------------------------------------
+# NOTES:
+# States 1 or 2 rules apply when there are no chevrons.
+# States 6 or 7 rules apply when there are chevrons. Example: <<Joshua chaps 20-24>>.
+
+# With a blank space
+# -------------------
+6 CHAPS +[-1]=|-|#A -
+6 CHAPS +[-2]=|-|#B -
+6 CHAPS +[-3]=|-|#C -
+6 CHAPS +[-4]=|-|#D -
+6 CHAPS +[-5]=|-|#E -
+6 CHAPS +[-6]=|-|#F -
+6 CHAPS +[-7]=|-|#G -
+6 CHAPS +[-8]=|-|#H -
+6 CHAPS +[-9]=|-|#I -
+
+7 CHAPS +[-1]=|-|#A -
+7 CHAPS +[-2]=|-|#B -
+7 CHAPS +[-3]=|-|#C -
+7 CHAPS +[-4]=|-|#D -
+7 CHAPS +[-5]=|-|#E -
+7 CHAPS +[-6]=|-|#F -
+7 CHAPS +[-7]=|-|#G -
+7 CHAPS +[-8]=|-|#H -
+7 CHAPS +[-9]=|-|#I -
+
+# With a glue space
+# -------------------
+6 CHAPS +[-1]=|-|#A -
+6 CHAPS +[-2]=|-|#B -
+6 CHAPS +[-3]=|-|#C -
+6 CHAPS +[-4]=|-|#D -
+6 CHAPS +[-5]=|-|#E -
+6 CHAPS +[-6]=|-|#F -
+6 CHAPS +[-7]=|-|#G -
+6 CHAPS +[-8]=|-|#H -
+6 CHAPS +[-9]=|-|#I -
+
+7 CHAPS +[-1]=|-|#A -
+7 CHAPS +[-2]=|-|#B -
+7 CHAPS +[-3]=|-|#C -
+7 CHAPS +[-4]=|-|#D -
+7 CHAPS +[-5]=|-|#E -
+7 CHAPS +[-6]=|-|#F -
+7 CHAPS +[-7]=|-|#G -
+7 CHAPS +[-8]=|-|#H -
+7 CHAPS +[-9]=|-|#I -
+
+
+# -------------------------------------------------------
+# SPANNING FROM A VERSE TO A CHAPTER (Matthew 24:18—25:5)
+# -------------------------------------------------------
+# NOTES:
+#   1. The EM dash (in older publications) and EN dash (in current publications) are used in print to span from a verse to a chapter. In braille, a dash (,-) is used.
+#   2. The number sign is automatically inserted after an EM/EN dash to show the difference between an ending verse and a new chapter. (Ezekiel 44:27,-#45:2).
+#   3. If, for some reason, NO number sign appears after the EM/EN dash in the braille output, then check the PUBFILE to see what symbol is being used in its place and add it to the rules.txt file.
+#   4. Rules for spanning chapters MUST be placed ahead of the hyphen rules, because the hyphen rules omit the number sign after the hyphen in scriptures.
+
+6 [–]=|,|- -
+7 [–]=|,|- -
+
+# --------------------------------------
+# VERSES WITH COMMAS (Matthew 24:12, 15)
+# --------------------------------------
+# When it is desired to keep the space between verses, so that the verses can be split between lines, add an extra space in the document (total of 2 spaces). These rules counteract the ones below that remove a blank space between verses in imported scripture references.
+6 , [ 1]=#A -
+6 , [ 2]=#B -
+6 , [ 3]=#C -
+6 , [ 4]=#D -
+6 , [ 5]=#E -
+6 , [ 6]=#F -
+6 , [ 7]=#G -
+6 , [ 8]=#H -
+6 , [ 9]=#I -
+
+7 , [ 1]=#A -
+7 , [ 2]=#B -
+7 , [ 3]=#C -
+7 , [ 4]=#D -
+7 , [ 5]=#E -
+7 , [ 6]=#F -
+7 , [ 7]=#G -
+7 , [ 8]=#H -
+7 , [ 9]=#I -
+
+# The blank space is removed between verses in imported reference scriptures.
+6 ,[ 1]=A -
+6 ,[ 2]=B -
+6 ,[ 3]=C -
+6 ,[ 4]=D -
+6 ,[ 5]=E -
+6 ,[ 6]=F -
+6 ,[ 7]=G -
+6 ,[ 8]=H -
+6 ,[ 9]=I -
+
+7 ,[ 1]=A -
+7 ,[ 2]=B -
+7 ,[ 3]=C -
+7 ,[ 4]=D -
+7 ,[ 5]=E -
+7 ,[ 6]=F -
+7 ,[ 7]=G -
+7 ,[ 8]=H -
+7 ,[ 9]=I -
+
+# These rules ensure that the number sign is NOT repeated after a comma in scriptures.
+6 #[,1]=1A -
+6 #[,2]=1B -
+6 #[,3]=1C -
+6 #[,4]=1D -
+6 #[,5]=1E -
+6 #[,6]=1F -
+6 #[,7]=1G -
+6 #[,8]=1H -
+6 #[,9]=1I -
+6 #[,0]=1J -
+
+7 #[,1]=1A -
+7 #[,2]=1B -
+7 #[,3]=1C -
+7 #[,4]=1D -
+7 #[,5]=1E -
+7 #[,6]=1F -
+7 #[,7]=1G -
+7 #[,8]=1H -
+7 #[,9]=1I -
+7 #[,0]=1J -
+
+# --------------------------------------
+# VERSES WITH HYPHENS (Matthew 24:12-15)
+# --------------------------------------
+# These rules make sure that the number sign is NOT repeated after the hyphen. The | symbol prevents the numbers from being separated from the hyphen, so they are not split up on separate braille lines.
+
+# Exception for when scripture citation is textual. Ex: <<Ex chaps 25-29>>. See Spanning Chapters above.
+
+6 #[-1]=|-|A -
+6 #[-2]=|-|B -
+6 #[-3]=|-|C -
+6 #[-4]=|-|D -
+6 #[-5]=|-|E -
+6 #[-6]=|-|F -
+6 #[-7]=|-|G -
+6 #[-8]=|-|H -
+6 #[-9]=|-|I -
+7 #[-1]=|-|A -
+7 #[-2]=|-|B -
+7 #[-3]=|-|C -
+7 #[-4]=|-|D -
+7 #[-5]=|-|E -
+7 #[-6]=|-|F -
+7 #[-7]=|-|G -
+7 #[-8]=|-|H -
+7 #[-9]=|-|I -
+
+
+# ----------------------------------------------
+# VERSES WITH "A" and "B" PARTS (Matthew 28:19b)
+# ----------------------------------------------
+# These rules indicate a change from numbers to letters.
+6 #[A]=;A -
+6 #[B]=;B -
+6 #[C]=;C -
+6 #[D]=;D -
+7 #[A]=;A -
+7 #[B]=;B -
+7 #[C]=;C -
+7 #[D]=;D -
+
+# =================================================================
+# ADD SPACE BETWEEN BIBLE BOOK NAME AND CHAPTER NUMBER (Ruth1:1-13)
+# =================================================================
+# NOTE: When WTS uses the standard abbreviation of the Bible book name (found in System/Languages/English) for Bible footers and inserted scripture citations, book names that do not use an abbreviation point appear with no space after the book name. The rules below automatically add the space if not present.
+
+6 [ACTS]#=ACTS  -
+6 [AMOS]#=AMOS  -
+6 [ESTHER]#=ES!R  -
+6 [EZRA]#=EZRA  -
+6 [JOB]#=JOB  -
+6 [JOEL]#=JOEL  -
+6 [JOHN]#=JOHN  -
+6 [JONAH]#=JONAH  -
+6 [JUDE]#=JUDE  -
+6 [LUKE]#=LUKE  -
+6 [MARK]#=M>K  -
+6 [RUTH]#=RU?  -
+6 [TITUS]#=TITUS  -
+
+7 [ACTS]#=ACTS  -
+7 [AMOS]#=AMOS  -
+7 [ESTHER]#=ESTHER  -
+7 [EZRA]#=EZRA  -
+7 [JOB]#=JOB  -
+7 [JOEL]#=JOEL  -
+7 [JOHN]#=JOHN  -
+7 [JONAH]#=JONAH  -
+7 [JUDE]#=JUDE  -
+7 [LUKE]#=LUKE  -
+7 [MARK]#=MARK  -
+7 [RUTH]#=RUTH  -
+7 [TITUS]#=TITUS  -
+
+# ===========
+# BIBLE BOOKS
+# ===========
+
+# ABBREVIATED BOOK NAMES
+# ======================
+# Internal abbreviations (very short)
+# ----------------------
+# First of every rule is for adding a space in the doc to split book and chapter/verse across lines(and still add in the abbreviation point.)
+
+# With an extra space
+# -------------------
+
+6 #|[CH  ]=CH4  -
+6 #|[CO  ]=CO4  -
+6 #|[JO  ]=JO4  -
+6 #|[KI  ]=KI4  -
+6 #|[PE  ]=PE4  -
+6 #|[SA  ]=SA4  -
+6 #|[TH  ]=TH4  -
+6 #|[TI  ]=TI4  -
+
+6 ~[AC  ]#=;AC4  -
+6 ~[AM  ]#=AM4  -
+6 ~[CA  ]#=CA4  -
+6 ~[COL  ]#=COL4  -
+6 ~[DA  ]#=DA4  -
+6 ~[DE  ]#=DE4  -
+6 ~[EC  ]#=EC4  -
+6 ~[EPH  ]#=EPH4  -
+6 ~[ES  ]#=ES4  -
+6 ~[EX  ]#=EX4  -
+6 ~[EZE  ]#=EZE4  -
+6 ~[EZR  ]#=EZR4  -
+6 ~[GA  ]#=GA4  -
+6 ~[GE  ]#=GE4  -
+6 ~[HAB  ]#=HAB4  -
+6 ~[HAG  ]#=HAG4  -
+6 ~[HEB  ]#=HEB4  -
+6 ~[HO  ]#=HO4  -
+6 ~[ISA  ]#=ISA4  -
+6 ~[JAS  ]#=JAS4  -
+6 ~[JER  ]#=J]4  -
+6 ~[JG  ]#=JG4  -
+6 ~[JOE  ]#=JOE4  -
+6 ~[JOH  ]#=JOH4  -
+6 ~[JON  ]#=JON4  -
+6 ~[JOS  ]#=JOS4  -
+6 ~[LA  ]#=LA4  -
+6 ~[LE  ]#=LE4  -
+6 ~[LU  ]#=LU4  -
+6 ~[MAL  ]#=MAL4  -
+6 ~[MIC  ]#=MIC4  -
+6 ~[MR  ]#=MR4  -
+6 ~[MT  ]#=MT4  -
+6 ~[NA  ]#=NA4 -
+6 ~[NE  ]#=NE4  -
+6 ~[NU  ]#=NU4  -
+6 ~[OB  ]#=OB4  -
+6 ~[PHM  ]#=PHM4  -
+6 ~[PHP  ]#=PHP4  -
+6 ~[PR  ]#=PR4  -
+6 ~[PS  ]#=PS4  -
+6 ~[RE  ]#=RE4  -
+6 ~[RO  ]#=RO4  -
+6 ~[RU  ]#=RU4  -
+6 ~[TIT  ]#=TIT4  -
+6 ~[ZEC  ]#=ZEC4  -
+6 ~[ZEP  ]#=ZEP4  -
+
+7 #|[CH  ]=CH4  -
+7 #|[CO  ]=CO4  -
+7 #|[JO  ]=JO4  -
+7 #|[KI  ]=KI4  -
+7 #|[PE  ]=PE4  -
+7 #|[SA  ]=SA4  -
+7 #|[TH  ]=TH4  -
+7 #|[TI  ]=TI4  -
+
+7 ~[AC  ]#=AC4  -
+7 ~[AM  ]#=AM4  -
+7 ~[CA  ]#=CA4  -
+7 ~[DA  ]#=DA4  -
+7 ~[DE  ]#=DE4  -
+7 ~[COL  ]#=COL4  -
+7 ~[EC  ]#=EC4  -
+7 ~[EPH  ]#=EPH4  -
+7 ~[ES  ]#=ES4  -
+7 ~[EX  ]#=EX4  -
+7 ~[EZE  ]#=EZE4  -
+7 ~[EZR  ]#=EZR4  -
+7 ~[GA  ]#=GA4  -
+7 ~[GE  ]#=GE4  -
+7 ~[HAB  ]#=HAB4  -
+7 ~[HAG  ]#=HAG4  -
+7 ~[HEB  ]#=HEB4  -
+7 ~[HO  ]#=HO4  -
+7 ~[ISA  ]#=ISA4  -
+7 ~[JAS  ]#=JAS4  -
+7 ~[JER  ]#=JER4  -
+7 ~[JG  ]#=JG4  -
+7 ~[JOE  ]#=JOE4  -
+7 ~[JOH  ]#=JOH4  -
+7 ~[JON  ]#=JON4  -
+7 ~[JOS  ]#=JOS4  -
+7 ~[LA  ]#=LA4  -
+7 ~[LE  ]#=LE4  -
+7 ~[LU  ]#=LU4  -
+7 ~[MAL  ]#=MAL4  -
+7 ~[MIC  ]#=MIC4  -
+7 ~[MR  ]#=MR4  -
+7 ~[MT  ]#=MT4  -
+7 ~[NA  ]#=NA4  -
+7 ~[NE  ]#=NE4  -
+7 ~[NU  ]#=NU4  -
+7 ~[OB  ]#=OB4  -
+7 ~[PHM  ]#=PHM4  -
+7 ~[PHP  ]#=PHP4  -
+7 ~[PR  ]#=PR4  -
+7 ~[PS  ]#=PS4  -
+7 ~[RE  ]#=RE4  -
+7 ~[RO  ]#=RO4  -
+7 ~[RU  ]#=RU4  -
+7 ~[TIT  ]#=TIT4  -
+7 ~[ZEC  ]#=ZEC4  -
+7 ~[ZEP  ]#=ZEP4  -
+
+# ******************
+# SECTION 3: NUMBERS
+# ******************
+# NOTES:
+#	1. All EXCEPTIONS must come before the NUMBER SET that is at the end of this section.
+#	2. Exception rules are used when a NUMBER SIGN must NOT appear before a number or must appear in a different position than normal.
+#	3. The number set most commonly used: U+0030 to U+0039.
+#	4. Full-width number set: U+FF10 to U+FF19.
+#	5. Other languages may represent numbers with non-Arabic characters or abbreviations in their own script, such as Devanagari-based languages and Hebrew.
+
+
+# ===================
+# MULTI-DIGIT NUMBERS (144 000  144,000  144.000)
+# ===================
+# NOTES:
+#	1. In print, groups of numbers in multi-digit numbers are separated into groups using one of the following methods: a comma (,) a period (.) a glue space or thin space.
+#	2. Some languages use a number separator at different grouping points, rather than the thousandth place (e.g. 5,05,000 instead of 505,000).
+#	3. Only activate the necessary rules. Delete the rules that do not apply.
+
+# ------------
+# WITH A COMMA
+# ------------
+#   1. These rules prevent a numeric indicator from being repeated after a comma.
+#   2. Also used in QUESTION NUMBERS (1,2.) See also SECTION 6: PUNCTUATION—Comma.
+#   3. Watchtower style for braille is to remove the space between the question numbers.
+1 #[,0]=1J -
+1 #[,1]=1A -
+1 #[,2]=1B -
+1 #[,3]=1C -
+1 #[,4]=1D -
+1 #[,5]=1E -
+1 #[,6]=1F -
+1 #[,7]=1G -
+1 #[,8]=1H -
+1 #[,9]=1I -
+
+
+# ------------------------------
+# With a BACK SLASH (31/12 2021)
+# ------------------------------
+# First is for dates, where underscore is needed
+1 3[/4]/=_/#D -
+
+1 1[/4]~=/D -
+1 3[/4]~=/D -
+
+# From Bible, Appendix !: Glossary (Gerah, Log)
+2 ~1[/20] SHEKEL=/BJ -
+2 ~1[/2] =/B -
+2 ~1[/128]=/ABH -
+2 ~1[/12] OF A HIN=/AB -
+2 ~1[/64]=/FD -
+2 ~3[/4] =/D -
+
+# ---------------------
+# With a FRACTION SLASH
+# ---------------------
+# NOTES:
+#   1. The PUBFILE uses the same symbol for both the OBLIQUE STROKE and the FRACTION LINE.
+#   2. Since we want the oblique stroke to have priority, rules CANNOT be set up to handle fractions automatically. Fraction rules will interfere with "Model 03/920" or km dates like "km 10/11".
+#   3. Treat each fraction MANUALLY using DIRECT BRAILLE as it occurs in the text.
+#   4. Fractions are written with DOTS 34, and NOT repeating the numeric indicator after the fraction line.
+
+# From Bible, Appendix B-14 [Using a fraction line and NOT the oblique stroke.]
+1 #[⁄1]=/A -
+1 #[⁄2]=/B -
+1 #[⁄3]=/C -
+1 #[⁄4]=/D -
+1 #[⁄5]=/E -
+1 #[⁄6]=/F -
+1 #[⁄7]=/G -
+1 #[⁄8]=/H -
+1 #[⁄9]=/I -
+1 [⁄]=/ -
+
+# --------------------------
+# With a DECIMAL (7.0 quake)
+# --------------------------
+1 $[.0]=#4J -
+1 $[.1]=#4A -
+1 $[.2]=#4B -
+1 $[.3]=#4C -
+1 $[.4]=#4D -
+1 $[.5]=#4E -
+1 $[.6]=#4F -
+1 $[.7]=#4G -
+1 $[.8]=#4H -
+1 $[.9]=#4I -
+# These rules prevent a numeric indicator from being repeated after a decimal point.
+1 #[.0]=4J -
+1 #[.1]=4A -
+1 #[.2]=4B -
+1 #[.3]=4C -
+1 #[.4]=4D -
+1 #[.5]=4E -
+1 #[.6]=4F -
+1 #[.7]=4G -
+1 #[.8]=4H -
+1 #[.9]=4I -
+
+# -------------------------
+# With a DECIMAL (.5 quake)
+# -------------------------
+1 ~[.0]=#4J -
+1 ~[.1]=#4A -
+1 ~[.2]=#4B -
+1 ~[.3]=#4C -
+1 ~[.4]=#4D -
+1 ~[.5]=#4E -
+1 ~[.6]=#4F -
+1 ~[.7]=#4G -
+1 ~[.8]=#4H -
+1 ~[.9]=#4I -
+
+
+# =================
+# NUMBER EXCEPTIONS [to the rule BELOW for MULTI-DIGIT NUMBERS with NUMERIC GLUE SPACE INDICATOR (144 000)]
+# =================
+# NOTES:
+#   1. Without these exceptions, a series of numbers following each other AND joined by a glue space would be treated as a multi-digit number, where dot 5 would be inserted between each grouping.
+#   2. So far, these exceptions have been found in IT references (it-1 1200) and the Bible text. The rules below prevent these numbers from being viewed as a multi-digit number with glue spaces (24 000).
+#   3. Also used as the separator in telephone numbers, ISBN numbers, dates, etc.
+#   4. Any other combination of number groupings should be listed here.
+1 ~IT-#[ ]#=  -
+
+1 ~####[ 1]# ##~="A -
+1 ~####[ 2]# ##~="B -
+1 ~####[ 3]# ##~="C -
+1 ~####[ 4]# ##~="D -
+1 ~####[ 5]# ##~="E -
+1 ~####[ 6]# ##~="F -
+1 ~####[ 7]# ##~="G -
+1 ~####[ 8]# ##~="H -
+1 ~####[ 9]# ##~="I -
+1 ~####[ 0]# ##~="J -
+
+1 ~#### ##[ 1]#~="A -
+1 ~#### ##[ 2]#~="B -
+1 ~#### ##[ 3]#~="C -
+1 ~#### ##[ 4]#~="D -
+1 ~#### ##[ 5]#~="E -
+1 ~#### ##[ 6]#~="F -
+1 ~#### ##[ 7]#~="G -
+1 ~#### ##[ 8]#~="H -
+1 ~#### ##[ 9]#~="I -
+1 ~#### ##[ 0]#~="J -
+
+
+# -----
+# COMMA
+# -----
+# Watchtower Question Comma
+# -------------------------
+2 QUESTION+[,1]=1A -
+2 QUESTION+[,2]=1B -
+2 QUESTION+[,3]=1C -
+2 QUESTION+[,4]=1D -
+2 QUESTION+[,5]=1E -
+2 QUESTION+[,6]=1F -
+2 QUESTION+[,7]=1G -
+2 QUESTION+[,8]=1H -
+2 QUESTION+[,9]=1I -
+
+# ----------------------------
+# HYPHEN (10-12)   [UEB 6.5.4]
+# ----------------------------
+1 #[-]#=|-| -
+1 ![-]|E~=|-| -
+1 ![-]#=|-| -
+1 VAL[-]|!=|-| -
+1 VAL[-]!=|-| -
+1 ME[-]FIRST=|-| -
+
+# -------------------------
+# MEASUREMENT ABBREVIATIONS
+# -------------------------
+# NOTE: This section is only when a number (0-9) can be confused as a letter with braille output of A-J AND the space between number and letter needs to be closed up. Add rules as needed.
+
+# --------------
+# OBLIQUE STROKE [UEB 7.4]
+# --------------
+# NOTES:
+# 1. Determine how fractions and other uses for oblique stroke such as dates are represented and adjust or add rules accordingly.
+# 2. If fractions and oblique stroke use the same symbol, one of them will have to be handled in the Editor document.
+
+# ==========
+# NUMBER SET
+# ==========
+# NOTES:
+#	1. Two rules are needed for every number in order for the output to be correct.
+#	2. The first rule  1 #[0]=J -  ensures that NO number sign is output for the digit in the focus because it is NOT the first digit in the sequence.
+#	3. The second rule  1 [0]=#J -  ensures that a number sign WILL be output in front of the digit that was in the focus.
+
+1 #[0]=J -
+1 [0]=#J -
+1 #[1]=A -
+1 [1]=#A -
+1 #[2]=B -
+1 [2]=#B -
+1 #[3]=C -
+1 [3]=#C -
+1 #[4]=D -
+1 [4]=#D -
+1 #[5]=E -
+1 [5]=#E -
+1 #[6]=F -
+1 [6]=#F -
+1 #[7]=G -
+1 [7]=#G -
+1 #[8]=H -
+1 [8]=#H -
+1 #[9]=I -
+1 [9]=#I -
+
+
+# ***********************************************************************
+# SECTION 5: GRADE 1 ENGLISH SIGN LANGUAGE
+# ***********************************************************************
+
+
+1 [,]=| |1 -
+1 [“]=&  -
+1 [”]=| |Y -
+1 [.]=| |4 -
+1 [?]=| |? -
+1 [ADAM]=P--[O -
+1 [ALL]=&XXXY -
+1 [ANGEL]=F=D -
+1 [ANIMAL]=@63Q -
+1 [ASK]=G33? -
+1 [BAD]=E' -
+1 [BAPTISM]=59L59 -
+1 [BEAUTIFUL]=SE-IE-I: -
+1 [BIBLE]=E-I= -
+1 [BOOK]=E-I -
+1 [BOY]=6 -
+1 [BUILDING]=PCC? -
+1 [CHILD]=2 -
+1 [COME]=[333 -
+1 [CONGREGATION]=&XY-LLL-==== -
+1 [DIE]=_-' -
+1 [EARTH]=--[O -
+1 [EAT]=33G -
+1 [EVE]=R--[O -
+1 [FALSE]=XX3XX -
+1 [FAMILY]=P-R-2 -
+1 [FOREVER]=;B333O333O333O -
+1 [FRUIT]=C?PCE7 -
+1 [FUTURE]=;B333O -
+1 [PARADISE]=--SE-IE-I: -
+
+1 [GIRL]=8 -
+1 [GIVE]=G-3C -
+1 [GOOD]=9A -
+1 [GO]=333O -
+1 [GROUP]=&XY -
+1 [HAPPY]=GC<> -
+1 [HEAVEN]=--CEIC -
+1 [HELP]=G-=- -
+1 [HOLYSPIRIT]=H=J= -
+1 [HONOR]=G3III -
+1 [HOWMANY]=?# -
+1 [HOW]=?S: -
+1 [IMPROVE]=-7= -
+1 [JEHOVAHSWITNESSES]=LLL-==== -
+1 [JEHOVAH]===== -
+1 [JESUS]=K=== -
+1 [KINGDOMHALL]=PCC?-==== -
+1 [KING]=()() -
+1 [LEARN]=GCC[ -
+1 [LOVE]=$N -
+1 [MAKE]=GE37 -
+1 [MAN]=P -
+1 [MARRIAGE]=P-R -
+1 [ME]=L[ -
+1 [MIDDLE]=&33Y -
+1 [MONEY]=0=8 -
+1 [NAME]=8----0 -
+1 [NO]=IE' -
+1 [NUMBER]=# -
+1 [OLD]=,(5 -
+1 [PAST]=;B[333 -
+1 [PEOPLE]=LLL -
+1 [PERSON]=L -
+1 [PLACE]=-- -
+1 [PRAY]=,><' -
+1 [QUESTION]=? -
+1 [RANSOM]=&3[O3Y -
+1 [REVELATION]=G33&Y33&Y -
+1 [SATAN]=E35P -
+1 [SAY]=G33 -
+1 [SEE]=G@-A -
+1 [SONG]=G3IE3IE -
+1 [STAR]=--@@@@ -
+1 [STRONG]=H=J -
+1 [TEACH]=GCCO -
+1 [THINK]=G@@@ -
+1 [TIMEPASSING]=;B;B;B -
+1 [TIME]=;B -
+1 [TIMOTHY]=P-@QI-G33==== -
+1 [TO]=O -
+1 [TREE]=C?PC -
+1 [TRUE]==333= -
+1 [WANT]=G-9 -
+1 [WATER]=595959 -
+1 [WEAK]=,9=5' -
+1 [WHAT]=?7 -
+1 [WHERE]=?-- -
+1 [WHO]=?L -
+1 [WITH]="WR1 -
+1 [WOMAN]=R -
+1 [WRITE]=(111 -
+1 [YES]=5I -
+1 [YOUNG]=@QI  -
+1 [YOU]=LO -
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# These rules creates the space that occurs between words.
+1 [ ]=  -
+
+# -------------------
+# REGULAR BLANK SPACE (U+0020)
+# -------------------
+5 [ ]=  -
+1 [ ]=  -
+
+# ----------------------
+# GLUE SPACE FOR COPYING
+# ----------------------
+# NOTE: Between the brackets below is a glue space. It can be copied and used for rules that require a glue space. A glue space cannot be used in the output.
+# Glue space (U+00A0) for copying ---> [ ]
+
+
+
+# ***********
+# END OF FILE

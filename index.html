@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global Dots Symbol Finder</title>
+<meta name="description" content="Build Global Dots cells dot by dot and read them in your language.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@400;500;600;700&display=swap">
+<style id="gd-style">
+:root{
+  color-scheme:light;
+  --ground:#FBFCFF; --surface:#FFFFFF; --tint:#F2F5FC; --ink:#0D1A38; --muted:#56627F; --line:#DFE5F1;
+  --band:#FFFFFF; --band-2:#E6EDFC; --band-ink:#0D1A38; --band-muted:#56627F;
+  --royal:#2442B8; --royal-ink:#FFFFFF; --royal-soft:#E4E9FB;
+  --gold:#F0B233; --gold-deep:#B98212; --gold-soft:#FFF3D6;
+  --well:#E7ECF6; --well-deep:#D3DBEA;
+  --ok:#1C7A4B; --warn:#A8620A; --bad:#B63838; --focus:#2F6BFF;
+  --shadow:0 1px 2px rgba(13,26,56,.04),0 8px 24px -10px rgba(13,26,56,.10);
+  --display:"Lexend","Atkinson Hyperlegible",system-ui,sans-serif;
+  --font:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--ground)}
+body{margin:0;color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.gutter{padding-inline:16px}
+.wrap{max-width:1320px;margin:0 auto}
+
+/* hero band */
+.band{position:relative;background:linear-gradient(160deg,var(--band) 0%,var(--band-2) 100%);color:var(--band-ink);overflow:hidden;padding-block:28px 96px;border-bottom:1px solid var(--line)}
+.band::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(36,66,184,.13) 1.6px,transparent 2px);background-size:22px 22px;mask-image:linear-gradient(100deg,transparent 30%,#000 90%);-webkit-mask-image:linear-gradient(100deg,transparent 30%,#000 90%);pointer-events:none}
+.band .wrap{position:relative;display:flex;flex-wrap:wrap;gap:20px 32px;align-items:flex-end;justify-content:space-between}
+.brand{display:flex;gap:16px;align-items:center}
+.logo{width:56px;height:56px;border-radius:16px;background:var(--ink);border:1px solid var(--ink);display:grid;place-items:center;flex:none}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.1;margin:0;letter-spacing:-.02em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--royal)}
+.tagline{margin:6px 0 0;color:var(--band-muted);max-width:46ch}
+nav.tabs{display:flex;gap:4px;padding:5px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);flex-wrap:wrap}
+nav.tabs button{border:0;background:none;color:var(--band-muted);font-family:var(--display);font-weight:500;padding:9px 16px;border-radius:10px;cursor:pointer}
+nav.tabs button:hover{color:var(--band-ink)}
+nav.tabs button[aria-selected="true"]{background:var(--gold);color:#1B1400}
+main{margin-top:-64px;position:relative;padding-block:0 56px}
+.status{margin:0 0 14px;font-size:.85rem;color:var(--band-muted);min-height:1.3em}
+.status.err{color:var(--bad)}
+.status.ok{color:var(--ok)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:24px}
+.eyebrow{font-family:var(--display);font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.pad .btn{font-size:1.1rem;padding:13px 22px}
+.outcard .go select{font-size:1.1rem;padding:12px 14px}
+.outcard .go .btn{font-size:1.1rem;padding:13px 26px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;font-family:var(--display);font-weight:500;cursor:pointer;transition:transform .08s,border-color .15s,background .15s}
+.btn:hover{border-color:var(--royal)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--royal);border-color:var(--royal);color:var(--royal-ink)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1B1400}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad)}
+.btn.small{padding:6px 11px;font-size:.85rem;border-radius:9px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-size:.82rem;font-weight:700;color:var(--muted)}
+select,input[type=text],input[type=search],textarea{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;min-width:0}
+textarea{width:100%;min-height:160px;resize:vertical;font-family:ui-monospace,Consolas,monospace;font-size:.82rem}
+.note{margin:0;font-size:.9rem;padding:10px 14px;border-radius:12px;background:var(--tint)}
+.note.warn{background:var(--gold-soft);color:var(--warn)} .note.ok{color:var(--ok)} .note.bad{color:var(--bad)}
+kbd{font-family:ui-monospace,Consolas,monospace;font-size:.76rem;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--surface)}
+
+/* mini cell glyph */
+.cg{display:inline-block;vertical-align:middle}
+.cg circle.on{fill:var(--ink)}
+.cg circle.off{fill:#D6DDEB}
+.cells{display:inline-flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sym .art .cells{gap:14px}
+
+/* translate */
+.tx{display:grid;grid-template-columns:minmax(300px,460px) 1fr;gap:24px;align-items:stretch}
+@media (max-width:860px){.tx{grid-template-columns:1fr}}
+.tx>.card{display:flex;flex-direction:column;min-width:0}
+.tx .outcard .result{flex:1}
+.pad{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:22px}
+.bigcell{display:grid;grid-template-columns:repeat(2,auto);grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:24px 52px;padding:40px 56px;border-radius:34px;background:linear-gradient(180deg,var(--tint),var(--surface));border:1px solid var(--line);box-shadow:inset 0 2px 6px rgba(13,26,56,.06)}
+.dot{width:112px;height:112px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,var(--well-deep),var(--well) 70%);box-shadow:inset 0 4px 8px rgba(13,26,56,.18),0 1px 0 rgba(255,255,255,.6);transition:transform .1s,box-shadow .15s}
+.dot span{font-family:var(--display);font-weight:600;font-size:1.4rem;color:var(--muted)}
+.dot[aria-pressed="true"]{background:radial-gradient(circle at 38% 30%,#FFE7A8 0%,var(--gold) 45%,var(--gold-deep) 100%);box-shadow:0 8px 16px -4px rgba(185,130,18,.55),inset 0 -5px 8px rgba(0,0,0,.14)}
+.dot[aria-pressed="true"] span{color:#3A2700}
+.dot:active{transform:scale(.94)}
+@media (max-width:1000px){.pad .dot{width:96px;height:96px}.pad .bigcell{gap:20px 40px;padding:32px 44px}}
+@media (max-width:480px){.pad .dot{width:74px;height:74px}.pad .bigcell{gap:16px 30px;padding:24px 32px}}
+.minicell .dot{width:38px;height:38px}
+.minicell .dot span{font-size:.75rem}
+.minicell.bigcell{gap:10px 16px;padding:14px 18px;border-radius:16px}
+.preview{font-family:var(--display);font-size:1.15rem;color:var(--muted);min-height:1.5em}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.row.center{justify-content:center}
+.hint{font-size:.82rem;color:var(--muted);text-align:center;margin:0;line-height:1.9}
+.strip{min-height:170px;border-radius:18px;padding:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;background:var(--tint);border:2px dashed var(--line)}
+.strip.has{border-style:solid;border-color:var(--royal-soft)}
+.chip{display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 12px;cursor:pointer;box-shadow:0 1px 2px rgba(13,26,56,.06)}
+.chip:hover{border-color:var(--bad)}
+.chip.sp{width:36px;align-self:stretch;border-style:dashed;background:transparent;box-shadow:none}
+.empty{color:var(--muted);font-size:1.1rem}
+.go{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-top:18px}
+.result{margin-top:22px}
+.answer{border-radius:20px;padding:30px 32px;background:linear-gradient(135deg,var(--royal-soft),var(--surface));border:1px solid var(--line)}
+.lang-badge{display:inline-flex;gap:6px;align-items:center;font-family:var(--display);font-size:.95rem;font-weight:600;padding:6px 14px;border-radius:99px;background:var(--gold);color:#1B1400}
+.sentence{font-family:var(--display);font-weight:600;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.15;margin:16px 0 0;letter-spacing:-.01em;text-wrap:balance}
+.sentence .miss{color:var(--warn);font-style:italic;font-weight:400}
+.sentence .unk{color:var(--bad)}
+.notes{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.tablewrap{overflow-x:auto;margin-top:18px}
+table{border-collapse:collapse;width:100%;font-size:1.05rem}
+th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-family:var(--display);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+td .cells{flex-wrap:nowrap}
+td.dots{font-size:.92rem;color:var(--muted);white-space:nowrap}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+.pill.ok{color:var(--ok)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--bad)}
+
+/* browse */
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:18px}
+.toolbar .grow{flex:1 1 260px}
+.toolbar input{width:100%}
+.count{color:var(--muted);font-size:.88rem;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.sym{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.sym:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.sym .art{background:var(--tint);padding:18px 16px;min-height:84px;display:flex;align-items:center;justify-content:center}
+.sym .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.sym .en{font-family:var(--display);font-weight:600;font-size:1.1rem}
+.sym .vn{color:var(--royal);font-weight:700}
+.sym .vn.miss{color:var(--muted);font-weight:400;font-style:italic;font-size:.88rem}
+.sym .dn{font-size:.78rem;color:var(--muted)}
+.sym .acts{display:flex;gap:6px;margin-top:auto;padding-top:10px}
+
+/* manage */
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+@media (max-width:900px){.mg{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+.drop{border:2px dashed var(--royal);border-radius:18px;padding:28px 20px;text-align:center;background:var(--royal-soft);cursor:pointer;transition:background .15s}
+.drop.over{background:var(--gold-soft);border-color:var(--gold-deep)}
+.drop b{font-family:var(--display);font-size:1.1rem;display:block}
+.drop span{color:var(--muted);font-size:.9rem}
+.files{display:flex;flex-direction:column;gap:10px}
+.file{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--surface)}
+.file .kind{font-family:var(--display);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:8px;background:var(--tint)}
+.file .kind.rules{background:var(--gold-soft);color:var(--warn)}
+.file .name{font-weight:700;word-break:break-all}
+.file .sum{grid-column:1/-1;font-size:.88rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.file .sum select,.file .sum input{padding:6px 9px;border-radius:9px}
+.composer{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.composer .side{flex:1 1 200px;display:flex;flex-direction:column;gap:8px}
+.codeview{min-height:56px;border:1px dashed var(--line);border-radius:12px;padding:8px 12px;display:flex;align-items:center}
+.trlist{display:flex;flex-direction:column;gap:8px}
+.trrow{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:center}
+.trrow label{font-size:.88rem;font-weight:700}
+.langs{list-style:none;margin:0;padding:0}
+.langs li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.meter{height:6px;border-radius:99px;background:var(--tint);overflow:hidden;margin-top:6px;width:160px;max-width:100%}
+.meter i{display:block;height:100%;background:var(--gold)}
+.langs .cov{font-size:.8rem;color:var(--muted)}
+details summary{cursor:pointer;font-family:var(--display);font-weight:600}
+.savebar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin:0 0 16px;padding:12px 16px;border-radius:14px;background:var(--gold-soft);border:1px solid var(--gold);color:var(--ink);font-weight:700}
+footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 24px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div id="app">
+<header class="band gutter">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg width="30" height="40" viewBox="0 0 30 40"><circle cx="7" cy="7" r="5.5" fill="#F0B233"/><circle cx="23" cy="7" r="5.5" fill="#F0B233" opacity=".3"/><circle cx="7" cy="20" r="5.5" fill="#F0B233"/><circle cx="23" cy="20" r="5.5" fill="#F0B233"/><circle cx="7" cy="33" r="5.5" fill="#F0B233" opacity=".3"/><circle cx="23" cy="33" r="5.5" fill="#F0B233"/></svg></div>
+      <div>
+        <h1>Global <em>Dots</em> Symbol Finder</h1>
+        <p class="tagline">Raise the dots, build your symbols, and read them in your own language.</p>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" id="tab-translate" aria-selected="true" data-view="translate">Translate</button>
+      <button role="tab" id="tab-browse" aria-selected="false" data-view="browse">Browse symbols</button>
+      <button role="tab" id="tab-manage" aria-selected="false" data-view="manage" hidden>Manage</button>
+    </nav>
+  </div>
+</header>
+
+<main class="gutter"><div class="wrap">
+<p class="status" id="status"></p>
+
+<section id="view-translate">
+  <div class="tx">
+    <div class="card pad">
+      <p class="eyebrow" style="align-self:flex-start;margin:0">Build a cell</p>
+      <div class="bigcell" id="bigcell" aria-label="Six-dot cell"></div>
+      <div class="preview" id="cellPreview">Tap the dots to raise them</div>
+      <div class="row center">
+        <button class="btn gold" id="addCell">Add cell</button>
+        <button class="btn" id="addSpace">Word space</button>
+      </div>
+      <div class="row center">
+        <button class="btn ghost" id="backspace">Undo</button>
+        <button class="btn ghost danger" id="clearAll">Clear all</button>
+      </div>
+      <p class="hint">Keyboard: <kbd>1</kbd>–<kbd>6</kbd> dots · <kbd>Space</kbd> add cell · <kbd>Backspace</kbd> undo · <kbd>Enter</kbd> translate</p>
+    </div>
+    <div class="card outcard">
+      <p class="eyebrow">Your symbols</p>
+      <div class="strip" id="inputwin"></div>
+      <div class="go">
+        <div class="field" style="flex:1 1 200px">
+          <label for="langSel">Translate into</label>
+          <select id="langSel"></select>
+        </div>
+        <button class="btn primary" id="translateBtn">Translate</button>
+      </div>
+      <div class="result" id="result"></div>
+    </div>
+  </div>
+</section>
+
+<section id="view-browse" hidden>
+  <div class="card">
+    <div class="toolbar">
+      <div class="field grow"><label for="q">Search by word, translation or dot numbers</label><input type="search" id="q" placeholder="love, amor, 123456"></div>
+      <div class="field"><label for="langSel2">Show translation in</label><select id="langSel2"></select></div>
+      <div class="field"><label for="filt">Show</label><select id="filt"><option value="all">All symbols</option><option value="missing">Missing translation</option><option value="done">Translated</option></select></div>
+    </div>
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="view-manage" hidden>
+  <div class="card stack" id="signin" style="max-width:640px;margin:0 auto">
+    <p class="eyebrow" style="margin:0">Owner sign-in</p>
+    <p style="margin:0">Only the owner can change the symbols. Connect with a GitHub access key that can write to this site’s repository. It is saved only in this browser.</p>
+    <div class="two">
+      <div class="field"><label for="ghRepo">Repository (owner/name)</label><input type="text" id="ghRepo" placeholder="yourname/global-dots" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="ghBranch">Branch</label><input type="text" id="ghBranch" value="main" autocomplete="off" spellcheck="false"></div>
+    </div>
+    <div class="field"><label for="ghToken">Access key (fine-grained token)</label><input type="password" id="ghToken" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></div>
+    <div id="signMsg"></div>
+    <div class="row"><button class="btn gold" id="ghConnect">Connect</button></div>
+  </div>
+
+  <div class="mg" id="ownerTools" hidden>
+    <div class="stack">
+      <div class="card stack">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <p class="eyebrow" style="margin:0">Upload files</p>
+          <span class="cov" id="ghWho" style="font-size:.82rem;color:var(--muted)"></span>
+        </div>
+        <label class="drop" id="drop" for="upFiles">
+          <b>Drop rules.txt and dictionary.txt files here</b>
+          <span>or click to choose. They are saved to GitHub and everyone sees them in 2–3 minutes.</span>
+        </label>
+        <input type="file" id="upFiles" accept=".txt,text/plain" multiple hidden>
+        <div class="files" id="fileList"></div>
+        <div id="upMsg"></div>
+        <div class="row" id="upActions" hidden>
+          <button class="btn gold" id="upApply">Save to the website</button>
+          <button class="btn ghost" id="upClear">Cancel</button>
+        </div>
+      </div>
+      <div class="card stack">
+        <p class="eyebrow" style="margin:0">Languages</p>
+        <ul class="langs" id="langList"></ul>
+        <div class="row">
+          <div class="field" style="width:84px"><label for="lCode">Code</label><input type="text" id="lCode" maxlength="6" placeholder="F"></div>
+          <div class="field" style="flex:1 1 140px"><label for="lName">Name</label><input type="text" id="lName" placeholder="French"></div>
+          <button class="btn" id="addLang">Add or rename</button>
+        </div>
+        <div id="langMsg"></div>
+      </div>
+      <div class="row"><button class="btn ghost small" id="ghSignOut">Sign out on this browser</button></div>
+    </div>
+    <div class="stack">
+      <div class="card stack" id="symForm">
+        <p class="eyebrow" style="margin:0" id="formTitle">Add one symbol by hand</p>
+        <div class="composer">
+          <div class="bigcell minicell" id="minicell" aria-label="Cell for the new symbol"></div>
+          <div class="side">
+            <div class="codeview" id="codeview"></div>
+            <div class="row">
+              <button class="btn small gold" id="mAdd">Add cell</button>
+              <button class="btn small" id="mUndo">Undo</button>
+              <button class="btn small" id="mClear">Clear</button>
+              <button class="btn small" id="mFromInput">Copy from Translate</button>
+            </div>
+            <div class="field"><label for="fCode">Code in rules.txt</label><input type="text" id="fCode" spellcheck="false" autocomplete="off"></div>
+          </div>
+        </div>
+        <div class="two">
+          <div class="field"><label for="fEnglish">English meaning</label><input type="text" id="fEnglish" placeholder="e.g. holy spirit"></div>
+          <div class="field"><label for="fWord">Rules key</label><input type="text" id="fWord" placeholder="HOLYSPIRIT"></div>
+        </div>
+        <div class="field"><label for="fCat">Type</label><select id="fCat"><option value="word">Word or sign</option><option value="punctuation">Punctuation</option></select></div>
+        <p class="eyebrow" style="margin:6px 0 0">Translations</p>
+        <div class="trlist" id="trlist"></div>
+        <div id="formMsg"></div>
+        <div class="row">
+          <button class="btn primary" id="saveSym">Save symbol</button>
+          <button class="btn" id="newSym">New</button>
+          <span id="delWrap"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div></main>
+<footer class="gutter"><span id="foot"></span> · <a href="#manage" id="ownerLink" style="color:inherit">Owner</a></footer>
+</div>
+<script>
+(() => {
+// ================= cells =================
+// Each cell is written as one character in rules.txt; its position in this table gives the raised dots.
+const TABLE = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)=";
+const toMask = ch => TABLE.indexOf(ch);
+const toChar = m => TABLE[m];
+const dotsOf = ch => { const m = toMask(ch); if (m < 0) return '?'; let d = ''; for (let i = 0; i < 6; i++) if (m & (1 << i)) d += (i + 1); return d || '–'; };
+const dotsStr = s => [...s].map(dotsOf).join(' ');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const $ = id => document.getElementById(id);
+const normCode = s => String(s || '').toUpperCase().replace(/[^ -_]/g, '').replace(/ /g, '');
+const slug = w => String(w).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || ('u' + [...String(w)].map(c => c.codePointAt(0).toString(16)).join('-'));
+const idFor = (word, cat) => cat === 'punctuation' ? 'p-' + [...String(word)].map(c => c.codePointAt(0).toString(16)).join('-') : slug(word);
+const isWord = w => /^[A-Z0-9]+$/.test(w);
+const DIGITS = { A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7', H: '8', I: '9', J: '0' };
+const SPECIAL = { HOLYSPIRIT: 'holy spirit', HOWMANY: 'how many', TIMEPASSING: 'time passing', JEHOVAHSWITNESSES: "Jehovah's Witnesses", KINGDOMHALL: 'Kingdom Hall' };
+const PROPER = ['JEHOVAH', 'JESUS', 'ADAM', 'EVE', 'SATAN', 'TIMOTHY', 'REVELATION', 'BIBLE', 'HEAVEN', 'PARADISE'];
+const defaultEnglish = w => !isWord(w) ? w : SPECIAL[w] || (PROPER.includes(w) ? w[0] + w.slice(1).toLowerCase() : w.toLowerCase());
+
+function cellSVG(ch, size = 22) {
+  const m = toMask(ch), r = size * 0.12, w = size * 0.86, h = size;
+  const xs = [w * 0.26, w * 0.74], ys = [h * 0.14, h * 0.5, h * 0.86];
+  let c = '';
+  for (let i = 0; i < 6; i++) { const x = xs[i < 3 ? 0 : 1], y = ys[i % 3]; c += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" class="${m >= 0 && (m & (1 << i)) ? 'on' : 'off'}"/>`; }
+  return `<svg class="cg" width="${w.toFixed(0)}" height="${h}" viewBox="0 0 ${w.toFixed(1)} ${h}" aria-hidden="true">${c}</svg>`;
+}
+const cellsSVG = (s, size) => `<span class="cells">${[...s].map(ch => cellSVG(ch, size)).join('')}</span>`;
+
+// ================= files → symbols =================
+const PATHS = { rules: 'Source/rules.txt', meanings: 'Source/symbol_meanings.json', langs: 'Languages/languages.json', dict: c => `Languages/${c}/dictionary.txt` };
+const SECTION_END = '# These rules creates the space';
+const RULE_RE = /^1 \[([^\]]+)\]=(.*)$/;
+function splitLines(text) { const nl = text.includes('\r\n') ? '\r\n' : '\n'; return { lines: text.split(nl), nl }; }
+function sectionBounds(lines) {
+  const start = lines.findIndex(l => l.includes('SECTION 5'));
+  if (start < 0) throw new Error('rules.txt has no SECTION 5.');
+  let end = lines.findIndex((l, i) => i > start && l.startsWith(SECTION_END)); if (end < 0) end = lines.length;
+  return [start, end];
+}
+function parseRuleLine(line) {
+  const m = line.replace(/\s+$/, '').match(RULE_RE); if (!m) return null;
+  let rhs = m[2].replace(/\s+$/, ''); if (/\s-$/.test(rhs)) rhs = rhs.replace(/\s+-$/, '');
+  const code = rhs.replace(/\|/g, '').trim();
+  return code && m[1].trim() ? { word: m[1], code } : null;
+}
+function parseRules(text) {
+  const { lines } = splitLines(text.replace(/^﻿/, ''));
+  let b; try { b = sectionBounds(lines); } catch (e) { return null; }
+  const out = [];
+  for (let i = b[0]; i < b[1]; i++) { const r = parseRuleLine(lines[i]); if (r) out.push({ ...r, category: isWord(r.word) ? 'word' : 'punctuation' }); }
+  return out;
+}
+function parseDict(text) {
+  const map = new Map(); let code = null, name = null;
+  for (const raw of text.replace(/^﻿/, '').split(/\r?\n/)) {
+    const l = raw.trim(); if (!l) continue;
+    if (l.startsWith('#')) { const c = l.match(/Language Code:\s*([A-Za-z0-9_-]+)/i); if (c && !code) code = c[1].toUpperCase(); const n = l.match(/^#\s*(.+?)\s+Language Dictionary/i); if (n && !name) name = n[1]; continue; }
+    const i = l.indexOf('='); if (i < 0) continue;
+    const a = l.slice(0, i).trim().toLowerCase(), v = l.slice(i + 1).trim(); if (a && v && !map.has(a)) map.set(a, v);
+  }
+  return { map, code, name };
+}
+function buildSymbols(F) {
+  const rules = parseRules(F.rules || '') || [];
+  const dicts = Object.fromEntries(Object.keys(F.langs).map(c => [c, parseDict(F.dicts[c] || '').map]));
+  return rules.map(r => {
+    const info = F.meanings[r.word] || {};
+    const category = info.category || r.category, english = info.english || defaultEnglish(r.word);
+    const tr = {};
+    if (category !== 'punctuation') for (const [c, d] of Object.entries(dicts)) { const t = d.get(english.toLowerCase()); if (t) tr[c] = t; }
+    return { id: idFor(r.word, category), word: r.word, code: r.code, english, category, tr };
+  });
+}
+
+// ================= file editing (owner) =================
+function upsertRule(text, word, code, category, oldWord) {
+  const bom = text.startsWith('﻿'); const { lines, nl } = splitLines(bom ? text.slice(1) : text);
+  let [start, end] = sectionBounds(lines);
+  const drop = new Set([word, oldWord].filter(Boolean));
+  const kept = lines.filter((l, i) => !(i >= start && i < end && (parseRuleLine(l) || {}).word && drop.has(parseRuleLine(l).word)));
+  [start, end] = sectionBounds(kept);
+  const key = w => w + '￿';
+  let pos = end;
+  if (category === 'punctuation') { for (let i = start; i < end; i++) { const r = parseRuleLine(kept[i]); if (r && isWord(r.word)) { pos = i; break; } } }
+  else { for (let i = start; i < end; i++) { const r = parseRuleLine(kept[i]); if (r && isWord(r.word) && key(r.word) > key(word)) { pos = i; break; } } }
+  kept.splice(pos, 0, category === 'punctuation' ? `1 [${word}]=| |${code} -` : `1 [${word}]=${code} -`);
+  return (bom ? '﻿' : '') + kept.join(nl);
+}
+function removeRule(text, word) {
+  const bom = text.startsWith('﻿'); const { lines, nl } = splitLines(bom ? text.slice(1) : text);
+  const [start, end] = sectionBounds(lines);
+  return (bom ? '﻿' : '') + lines.filter((l, i) => !(i >= start && i < end && (parseRuleLine(l) || {}).word === word)).join(nl);
+}
+function setDictEntry(text, english, value, oldEnglish) {
+  const lines = (text || '').split('\n');
+  const keys = new Set([english.toLowerCase(), oldEnglish && oldEnglish.toLowerCase()].filter(Boolean));
+  const out = []; let placed = false;
+  for (const line of lines) {
+    const s = line.trim();
+    if (s && !s.startsWith('#') && s.includes('=') && keys.has(s.split('=')[0].trim().toLowerCase())) { if (value && !placed) { out.push(`${english} = ${value}`); placed = true; } continue; }
+    out.push(line);
+  }
+  if (value && !placed) { while (out.length && out[out.length - 1].trim() === '') out.pop(); out.push(`${english} = ${value}`, ''); }
+  return out.join('\n');
+}
+const newDictText = (code, name) => `# ${name} Language Dictionary (Language Code: ${code})\n# Format: English Word = ${name} Translation\n\n`;
+
+// ================= GitHub =================
+const gh = {
+  cfg: null,
+  load() { try { this.cfg = JSON.parse(localStorage.getItem('gd.github') || 'null'); } catch (e) { this.cfg = null; } return this.cfg; },
+  save(c) { this.cfg = c; try { localStorage.setItem('gd.github', JSON.stringify(c)); } catch (e) {} },
+  clear() { this.cfg = null; try { localStorage.removeItem('gd.github'); } catch (e) {} },
+  async call(method, path, body) {
+    const r = await fetch('https://api.github.com' + path, { method, cache: 'no-store', headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + this.cfg.token, 'X-GitHub-Api-Version': '2022-11-28', ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
+    if (r.status === 404 && method === 'GET') return null;
+    const t = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(r.status === 401 ? 'GitHub did not accept the access key.' : r.status === 403 ? 'The access key cannot write to this repository.' : r.status === 409 ? 'The file changed on GitHub in the meantime. Please try again.' : (t.message || 'GitHub error ' + r.status));
+    return t;
+  },
+  url(p) { return `/repos/${this.cfg.repo}/contents/${p.split('/').map(encodeURIComponent).join('/')}`; },
+  async get(p) {
+    const t = await this.call('GET', this.url(p) + '?ref=' + encodeURIComponent(this.cfg.branch));
+    if (!t) return null;
+    const bin = atob((t.content || '').replace(/\n/g, '')); const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+    return { sha: t.sha, text: new TextDecoder('utf-8', { ignoreBOM: true }).decode(bytes) };
+  },
+  async put(p, data, message) {
+    const bytes = typeof data === 'string' ? new TextEncoder().encode(data) : data;
+    let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    const cur = await this.call('GET', this.url(p) + '?ref=' + encodeURIComponent(this.cfg.branch));
+    await this.call('PUT', this.url(p), { message, content: btoa(bin), branch: this.cfg.branch, ...(cur ? { sha: cur.sha } : {}) });
+  }
+};
+
+// ================= data loading =================
+let F = { rules: '', meanings: {}, langs: {}, dicts: {} };
+let symbols = [], languages = [], canEdit = false;
+async function readPublic(p) { const r = await fetch(p + '?t=' + Date.now(), { cache: 'no-store' }); if (!r.ok) throw new Error(`Could not load ${p} (${r.status}).`); return r.text(); }
+async function readOwner(p) { const f = await gh.get(p); if (!f) throw new Error(`${p} is missing in the repository.`); return f.text; }
+async function loadPublic() {
+  const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('Could not load the symbols (' + r.status + ').');
+  const d = await r.json();
+  languages = d.languages || [];
+  symbols = (d.symbols || []).map(s => ({ ...s, tr: s.tr || {}, id: idFor(s.word, s.category) }));
+  renderAll();
+}
+async function loadAll() {
+  if (!canEdit) return loadPublic();
+  const read = readOwner;
+  const [rules, langsT, meaningsT] = await Promise.all([read(PATHS.rules), read(PATHS.langs), read(PATHS.meanings).catch(() => '{}')]);
+  const langs = JSON.parse(langsT), meanings = JSON.parse(meaningsT || '{}');
+  const dicts = {};
+  await Promise.all(Object.keys(langs).map(async c => { dicts[c] = await read(PATHS.dict(c)).catch(() => ''); }));
+  F = { rules, langs, meanings, dicts };
+  symbols = buildSymbols(F);
+  languages = Object.entries(langs).map(([code, name]) => ({ code, name }));
+  renderAll();
+}
+function setStatus(msg, kind) { const el = $('status'); el.textContent = msg || ''; el.className = 'status' + (kind ? ' ' + kind : ''); }
+async function saveFiles(changes, done) {
+  // changes: [{path, data, message}]
+  setStatus('Saving to GitHub…');
+  for (const c of changes) await gh.put(c.path, c.data, c.message);
+  await loadAll();
+  setStatus(done + ' Visitors will see it in 2–3 minutes, once GitHub rebuilds the site.', 'ok');
+}
+
+// ================= lookup =================
+let byCode = new Map(), maxLen = 1;
+function reindex() {
+  byCode = new Map(); maxLen = 1;
+  const sorted = [...symbols].sort((a, b) => (a.category === 'punctuation') - (b.category === 'punctuation') || a.english.localeCompare(b.english));
+  for (const s of sorted) { if (!byCode.has(s.code)) byCode.set(s.code, []); byCode.get(s.code).push(s); maxLen = Math.max(maxLen, s.code.length); }
+}
+function numberAt(str, i) { if (str[i] !== '#') return null; let j = i + 1, out = ''; while (j < str.length && DIGITS[str[j]]) { out += DIGITS[str[j]]; j++; } return out ? { len: j - i, text: out } : null; }
+function segment(str) {
+  const segs = [];
+  for (const tok of str.split(' ')) {
+    if (!tok) continue;
+    let i = 0;
+    while (i < tok.length) {
+      let hit = null;
+      for (let L = Math.min(maxLen, tok.length - i); L >= 1; L--) { const c = tok.substr(i, L); if (byCode.has(c)) { hit = { code: c, syms: byCode.get(c) }; break; } }
+      const num = numberAt(tok, i);
+      if (num && (!hit || num.len >= hit.code.length)) { segs.push({ code: tok.substr(i, num.len), number: num.text }); i += num.len; continue; }
+      if (hit) { segs.push(hit); i += hit.code.length; continue; }
+      segs.push({ code: tok[i], unknown: true }); i++;
+    }
+  }
+  return segs;
+}
+function vern(sym, lang) {
+  if (sym.category === 'punctuation' || lang === 'E') return { text: sym.english, ok: true };
+  const t = sym.tr[lang]; return t ? { text: t, ok: true } : { text: sym.english, ok: false };
+}
+const langName = c => c === 'E' ? 'English' : ((languages.find(l => l.code === c) || {}).name || c);
+const pref = { get(k, d) { try { return localStorage.getItem('gd.' + k) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('gd.' + k, v); } catch (e) {} } };
+
+// ================= translate =================
+let input = [], cur = 0, mCells = '', mCur = 0, editingId = null;
+function buildCell(host, get, set) {
+  host.innerHTML = '';
+  for (let d = 1; d <= 6; d++) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'dot'; b.dataset.dot = d; b.setAttribute('aria-label', 'Dot ' + d); b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = '<span>' + d + '</span>'; b.addEventListener('click', () => set(get() ^ (1 << (d - 1)))); host.appendChild(b);
+  }
+}
+function paintCell(host, mask) { host.querySelectorAll('.dot').forEach(b => b.setAttribute('aria-pressed', String(!!(mask & (1 << (b.dataset.dot - 1)))))); }
+buildCell($('bigcell'), () => cur, m => { cur = m; renderCell(); });
+buildCell($('minicell'), () => mCur, m => { mCur = m; paintCell($('minicell'), mCur); });
+function renderCell() { paintCell($('bigcell'), cur); $('cellPreview').textContent = cur ? 'Dots ' + [...dotsOf(toChar(cur))].join(' · ') : 'Tap the dots to raise them'; }
+function addCell() { if (!cur) { addSpace(); return; } input.push(toChar(cur)); cur = 0; renderCell(); renderInput(); }
+function addSpace() { if (input.length && input[input.length - 1] !== ' ') input.push(' '); renderInput(); }
+function renderInput() {
+  const w = $('inputwin'); w.classList.toggle('has', input.length > 0);
+  if (!input.length) { w.innerHTML = '<span class="empty">Raise dots in the cell, then press <b>Add cell</b>. Your symbols line up here.</span>'; return; }
+  w.innerHTML = input.map((c, i) => c === ' ' ? `<button class="chip sp" data-i="${i}" aria-label="Word space, click to remove"></button>`
+    : `<button class="chip" data-i="${i}" aria-label="Cell with dots ${dotsOf(c)}, click to remove" title="Dots ${dotsOf(c)} · click to remove">${cellSVG(c, 54)}</button>`).join('');
+}
+$('inputwin').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; input.splice(+b.dataset.i, 1); renderInput(); });
+$('addCell').onclick = addCell; $('addSpace').onclick = addSpace;
+$('backspace').onclick = () => { if (cur) { cur = 0; renderCell(); } else { input.pop(); renderInput(); } };
+$('clearAll').onclick = () => { input = []; cur = 0; renderCell(); renderInput(); $('result').innerHTML = ''; };
+$('translateBtn').onclick = translate;
+document.addEventListener('keydown', e => {
+  if ($('view-translate').hidden) return;
+  const t = e.target;
+  if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) { if (e.key === 'Enter' && t.id === 'langSel') { e.preventDefault(); translate(); } return; }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (t && t.tagName === 'BUTTON' && [' ', 'Enter'].includes(e.key)) t.blur();
+  if (/^[1-6]$/.test(e.key)) { cur ^= 1 << (e.key - 1); renderCell(); e.preventDefault(); }
+  else if (e.key === ' ') { addCell(); e.preventDefault(); }
+  else if (e.key === 'Backspace') { $('backspace').click(); e.preventDefault(); }
+  else if (e.key === 'Enter') { translate(); e.preventDefault(); }
+});
+function translate() {
+  if (cur) addCell();
+  const lang = $('langSel').value || 'E', str = input.join('').trim(), out = $('result');
+  if (!str) { out.innerHTML = '<p class="note">Build at least one cell first.</p>'; return; }
+  let sentence = '', rows = '', missing = 0, unknown = 0;
+  for (const s of segment(str)) {
+    let piece, cls = '', en, status;
+    if (s.number) { piece = s.number; en = 'number ' + s.number; status = '<span class="pill ok">number</span>'; }
+    else if (s.unknown) { piece = '?'; cls = 'unk'; unknown++; en = '—'; status = '<span class="pill bad">not in the system</span>'; }
+    else {
+      const v = vern(s.syms[0], lang); piece = v.text; if (!v.ok) { cls = 'miss'; missing++; }
+      en = s.syms.map(x => esc(x.english)).join(' <span style="color:var(--muted)">or</span> ');
+      status = v.ok ? '<span class="pill ok">found</span>' : `<span class="pill warn">no ${esc(langName(lang))} yet</span>`;
+      if (s.syms.length > 1) status += ' <span class="pill warn">' + s.syms.length + ' meanings</span>';
+    }
+    const isP = s.syms && s.syms[0].category === 'punctuation';
+    sentence += (sentence && !isP ? ' ' : '') + (cls ? `<span class="${cls}">${esc(piece)}</span>` : esc(piece));
+    const vtext = s.syms ? s.syms.map(x => { const v = vern(x, lang); return v.ok ? esc(v.text) : `<i style="color:var(--warn)">${esc(x.english)}</i>`; }).join(' / ') : esc(piece);
+    rows += `<tr><td>${cellsSVG(s.code, 36)}</td><td class="dots">${esc(dotsStr(s.code))}</td><td>${en}</td><td><b>${vtext}</b></td><td>${status}</td></tr>`;
+  }
+  let notes = '';
+  if (missing) notes += `<p class="note warn">${missing} symbol${missing > 1 ? 's have' : ' has'} no ${esc(langName(lang))} translation yet, so ${missing > 1 ? 'they are' : 'it is'} shown in English, in italics.</p>`;
+  if (unknown) notes += `<p class="note bad">${unknown} cell${unknown > 1 ? 's are' : ' is'} not part of any symbol in the system.</p>`;
+  out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(langName(lang))}</span><p class="sentence">${sentence}</p></div>${notes ? `<div class="notes">${notes}</div>` : ''}
+    <div class="tablewrap"><table><thead><tr><th>Cells</th><th>Dots</th><th>English</th><th>${esc(langName(lang))}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+// ================= selects & browse =================
+function renderLangSelects() {
+  const opts = [{ code: 'E', name: 'English' }, ...[...languages].sort((a, b) => a.name.localeCompare(b.name))];
+  for (const id of ['langSel', 'langSel2']) {
+    const sel = $(id), keep = sel.value || pref.get(id, 'E');
+    sel.innerHTML = opts.map(l => `<option value="${esc(l.code)}">${esc(l.name)}</option>`).join('');
+    sel.value = opts.some(o => o.code === keep) ? keep : 'E';
+  }
+}
+['langSel', 'langSel2'].forEach(id => $(id).addEventListener('change', e => { pref.set(id, e.target.value); if (id === 'langSel2') renderBrowse(); else if ($('result').innerHTML) translate(); }));
+function renderBrowse() {
+  const q = $('q').value.trim().toLowerCase(), lang = $('langSel2').value || 'E', f = $('filt').value;
+  const qDots = /^[1-6 ]+$/.test(q) ? q.split(/\s+/).filter(Boolean) : null;
+  let list = [...symbols].sort((a, b) => (a.category === 'punctuation') - (b.category === 'punctuation') || a.english.localeCompare(b.english));
+  list = list.filter(s => {
+    if (f !== 'all' && lang !== 'E' && s.category !== 'punctuation') { const has = !!s.tr[lang]; if (f === 'missing' && has) return false; if (f === 'done' && !has) return false; }
+    if (!q) return true;
+    if (qDots) { const ds = [...s.code].map(dotsOf); return qDots.every(d => ds.includes(d)); }
+    return [s.english, ...Object.values(s.tr)].join(' | ').toLowerCase().includes(q);
+  });
+  $('count').textContent = `${list.length} of ${symbols.length} symbols`;
+  $('grid').innerHTML = list.map(s => {
+    const v = vern(s, lang);
+    return `<article class="sym"><div class="art">${cellsSVG(s.code, 44)}</div><div class="body">
+      <div class="en">${esc(s.english)}</div>
+      ${lang !== 'E' && s.category !== 'punctuation' ? `<div class="vn ${v.ok ? '' : 'miss'}">${v.ok ? esc(v.text) : 'No ' + esc(langName(lang)) + ' translation yet'}</div>` : ''}
+      <div class="dn">Dots ${esc(dotsStr(s.code))}</div>
+      <div class="acts"><button class="btn small" data-use="${esc(s.id)}">Use in Translate</button>${canEdit ? `<button class="btn small ghost" data-edit="${esc(s.id)}">Edit</button>` : ''}</div></div></article>`;
+  }).join('') || '<p class="count">No symbols match that search.</p>';
+}
+$('q').addEventListener('input', renderBrowse); $('filt').addEventListener('change', renderBrowse);
+$('grid').addEventListener('click', e => {
+  const u = e.target.closest('[data-use]'), ed = e.target.closest('[data-edit]');
+  if (u) { const s = symbols.find(x => x.id === u.dataset.use); if (!s) return; if (input.length && input[input.length - 1] !== ' ') input.push(' '); input.push(...s.code); renderInput(); show('translate'); translate(); }
+  if (ed) { loadForm(ed.dataset.edit); show('manage'); $('symForm').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+});
+
+// ================= owner: sign in =================
+function guessRepo() { const m = location.hostname.match(/^([^.]+)\.github\.io$/i); if (!m) return ''; const seg = location.pathname.split('/').filter(Boolean)[0]; return m[1] + '/' + (seg && !/\.html?$/i.test(seg) ? seg : m[1] + '.github.io'); }
+$('ghConnect').onclick = async () => {
+  const repo = $('ghRepo').value.trim().replace(/^https?:\/\/github\.com\//i, '').replace(/\/+$/, ''), branch = $('ghBranch').value.trim() || 'main', token = $('ghToken').value.trim();
+  if (!/^[^/\s]+\/[^/\s]+$/.test(repo) || !token) return msg('signMsg', 'Enter the repository as owner/name and paste your access key.', 'bad');
+  gh.cfg = { repo, branch, token }; $('ghConnect').disabled = true; msg('signMsg', 'Checking…');
+  try {
+    const info = await gh.call('GET', `/repos/${repo}`);
+    if (!info) throw new Error('Repository not found. Check the name and that the key has access to it.');
+    if (!(info.permissions && info.permissions.push)) throw new Error('This key can read the repository but cannot save to it.');
+    gh.save(gh.cfg); await ownerOn(); msg('signMsg', '');
+  } catch (e) { gh.cfg = null; msg('signMsg', e.message, 'bad'); }
+  finally { $('ghConnect').disabled = false; }
+};
+$('ghSignOut').onclick = () => { gh.clear(); canEdit = false; $('ghToken').value = ''; renderOwner(); renderBrowse(); setStatus('Signed out on this browser.'); };
+async function ownerOn() { canEdit = true; renderOwner(); setStatus('Loading the latest files from GitHub…'); await loadAll(); setStatus(''); }
+function renderOwner() {
+  $('signin').hidden = canEdit; $('ownerTools').hidden = !canEdit; $('tab-manage').hidden = !canEdit && location.hash !== '#manage';
+  if (canEdit) $('ghWho').textContent = gh.cfg.repo + ' · ' + gh.cfg.branch;
+  else if (!$('ghRepo').value) $('ghRepo').value = guessRepo();
+}
+$('ownerLink').onclick = e => { e.preventDefault(); $('tab-manage').hidden = false; show('manage'); };
+
+// ================= owner: upload =================
+let uploads = [];
+function msg(id, text, kind) { $(id).innerHTML = text ? `<p class="note ${kind || ''}">${esc(text)}</p>` : ''; }
+function renderUploads() {
+  const wordSyms = symbols.filter(s => s.category !== 'punctuation');
+  $('fileList').innerHTML = uploads.map((u, i) => {
+    if (u.kind === 'bad') return `<div class="file"><span class="kind">?</span><span class="name">${esc(u.name)}</span><button class="btn small ghost" data-rm="${i}">Remove</button><div class="sum" style="color:var(--bad)">This file has no symbol rules (Section 5) and no “English = translation” lines.</div></div>`;
+    if (u.kind === 'rules') {
+      const have = new Map(symbols.map(s => [s.word, s])), incoming = new Set(u.rules.map(r => r.word));
+      const add = u.rules.filter(r => !have.has(r.word)).length, chg = u.rules.filter(r => have.has(r.word) && have.get(r.word).code !== r.code).length, gone = symbols.filter(s => !incoming.has(s.word)).length;
+      return `<div class="file"><span class="kind rules">Rules</span><span class="name">${esc(u.name)}</span><button class="btn small ghost" data-rm="${i}">Remove</button><div class="sum">${u.rules.length} symbols · <b>${add} new</b> · ${chg} with changed cells · ${gone} removed</div></div>`;
+    }
+    const known = languages.some(l => l.code === u.lang);
+    const matches = wordSyms.filter(s => u.dict.map.has(s.english.toLowerCase())).length;
+    const opts = languages.map(l => `<option value="${esc(l.code)}" ${l.code === u.lang ? 'selected' : ''}>${esc(l.name)} (${esc(l.code)})</option>`).join('') + `<option value="__new" ${!known ? 'selected' : ''}>New language…</option>`;
+    return `<div class="file"><span class="kind">Dictionary</span><span class="name">${esc(u.name)}</span><button class="btn small ghost" data-rm="${i}">Remove</button>
+      <div class="sum">Language <select data-lang="${i}" aria-label="Language for ${esc(u.name)}">${opts}</select>
+      ${!known ? `<input type="text" data-ncode="${i}" value="${esc(u.lang || '')}" placeholder="Code" style="width:70px" aria-label="New language code"><input type="text" data-nname="${i}" value="${esc(u.newName || '')}" placeholder="Name" style="width:130px" aria-label="New language name">` : ''}
+      · ${u.dict.map.size} entries · <b>${matches}</b> match symbols</div></div>`;
+  }).join('');
+  $('upActions').hidden = !uploads.some(u => u.kind !== 'bad');
+}
+async function takeFiles(list) {
+  for (const f of list) {
+    const bytes = new Uint8Array(await f.arrayBuffer()), text = new TextDecoder('utf-8').decode(bytes);
+    const rules = parseRules(text);
+    if (rules && rules.length) { uploads.push({ name: f.name, kind: 'rules', rules, bytes }); continue; }
+    const dict = parseDict(text);
+    if (dict.map.size) {
+      const lang = languages.some(l => l.code === dict.code) ? dict.code : (dict.code || '');
+      uploads.push({ name: f.name, kind: 'dict', dict, lang, newName: dict.name || '', bytes });
+    } else uploads.push({ name: f.name, kind: 'bad' });
+  }
+  $('upMsg').innerHTML = uploads.some(u => u.kind === 'dict') ? '<p class="note">Check the language next to each dictionary. Every dictionary is named dictionary.txt, so the page reads the language from the file’s first lines. Make sure it is right.</p>' : '';
+  renderUploads();
+}
+$('upFiles').addEventListener('change', e => { takeFiles([...e.target.files]); e.target.value = ''; });
+const drop = $('drop');
+['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => takeFiles([...e.dataTransfer.files].filter(f => /\.txt$/i.test(f.name) || f.type === 'text/plain')));
+$('fileList').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (b) { uploads.splice(+b.dataset.rm, 1); renderUploads(); } });
+$('fileList').addEventListener('change', e => { const s = e.target.closest('[data-lang]'); if (s) { uploads[+s.dataset.lang].lang = s.value === '__new' ? '' : s.value; renderUploads(); } });
+$('fileList').addEventListener('input', e => {
+  const c = e.target.closest('[data-ncode]'), n = e.target.closest('[data-nname]');
+  if (c) uploads[+c.dataset.ncode].lang = c.value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+  if (n) uploads[+n.dataset.nname].newName = n.value.trim();
+});
+$('upClear').onclick = () => { uploads = []; renderUploads(); $('upMsg').innerHTML = ''; };
+$('upApply').onclick = async () => {
+  const dicts = uploads.filter(u => u.kind === 'dict'), rules = uploads.filter(u => u.kind === 'rules');
+  for (const u of dicts) {
+    if (!u.lang || u.lang === 'E') return msg('upMsg', `Choose a language for ${u.name} (E is reserved for English).`, 'bad');
+    if (!languages.some(l => l.code === u.lang) && !u.newName) return msg('upMsg', `Enter a name for the new language ${u.lang}.`, 'bad');
+  }
+  if (rules.length > 1) return msg('upMsg', 'Upload only one rules.txt at a time.', 'bad');
+  const changes = [];
+  if (rules[0]) changes.push({ path: PATHS.rules, data: rules[0].bytes, message: 'Update rules.txt' });
+  const langs = { ...F.langs }; let langsChanged = false;
+  for (const u of dicts) {
+    if (!langs[u.lang]) { langs[u.lang] = u.newName; langsChanged = true; }
+    changes.push({ path: PATHS.dict(u.lang), data: u.bytes, message: `Update ${langs[u.lang]} dictionary` });
+  }
+  if (langsChanged) changes.push({ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: 'Add language' });
+  $('upApply').disabled = true;
+  try { await saveFiles(changes, `Saved ${changes.length} file${changes.length > 1 ? 's' : ''} to GitHub.`); uploads = []; renderUploads(); msg('upMsg', 'Saved. Visitors will see the update in 2–3 minutes.', 'ok'); }
+  catch (e) { msg('upMsg', e.message, 'bad'); setStatus(''); }
+  finally { $('upApply').disabled = false; }
+};
+
+// ================= owner: one symbol =================
+function renderCodeview() {
+  $('codeview').innerHTML = mCells ? cellsSVG(mCells, 30) + `<span style="margin-left:10px;font-size:.82rem;color:var(--muted)">${esc(dotsStr(mCells))}</span>` : '<span style="color:var(--muted);font-size:.9rem">No cells yet</span>';
+  if (document.activeElement !== $('fCode')) $('fCode').value = mCells;
+  const same = symbols.filter(s => s.code === mCells && mCells && s.id !== editingId);
+  msg('formMsg', same.length ? `These cells already mean “${same.map(s => s.english).join('”, “')}”. Saving gives them more than one meaning.` : '', 'warn');
+}
+$('mAdd').onclick = () => { if (mCur) mCells += toChar(mCur); mCur = 0; paintCell($('minicell'), 0); renderCodeview(); };
+$('mUndo').onclick = () => { mCells = mCells.slice(0, -1); renderCodeview(); };
+$('mClear').onclick = () => { mCells = ''; mCur = 0; paintCell($('minicell'), 0); renderCodeview(); };
+$('mFromInput').onclick = () => { mCells = input.join('').replace(/ /g, ''); renderCodeview(); };
+$('fCode').addEventListener('input', e => { mCells = normCode(e.target.value); renderCodeview(); });
+let wordTouched = false;
+$('fEnglish').addEventListener('input', e => { if (!wordTouched && $('fCat').value === 'word') $('fWord').value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); });
+$('fWord').addEventListener('input', () => { wordTouched = true; });
+function renderTrList(sym) {
+  $('trlist').innerHTML = languages.length ? [...languages].sort((a, b) => a.name.localeCompare(b.name)).map(l =>
+    `<div class="trrow"><label for="tr-${esc(l.code)}">${esc(l.name)}</label><input type="text" id="tr-${esc(l.code)}" data-lang="${esc(l.code)}" value="${esc(sym ? sym.tr[l.code] || '' : '')}"></div>`).join('') : '<p class="note">Add a language first.</p>';
+}
+function loadForm(id) {
+  const s = symbols.find(x => x.id === id); editingId = s ? s.id : null; wordTouched = !!s;
+  $('formTitle').textContent = s ? `Edit “${s.english}”` : 'Add one symbol by hand';
+  mCells = s ? s.code : ''; mCur = 0; paintCell($('minicell'), 0);
+  $('fEnglish').value = s ? s.english : ''; $('fWord').value = s ? s.word : ''; $('fCat').value = s ? s.category : 'word';
+  renderTrList(s); renderCodeview();
+  $('delWrap').innerHTML = s ? '<button class="btn ghost danger" id="delSym">Delete…</button>' : '';
+}
+$('newSym').onclick = () => loadForm(null);
+$('delWrap').addEventListener('click', async e => {
+  if (e.target.id === 'delSym') $('delWrap').innerHTML = '<span class="row">Delete this symbol? <button class="btn small danger" id="delYes">Delete</button><button class="btn small" id="delNo">Keep</button></span>';
+  if (e.target.id === 'delNo') loadForm(editingId);
+  if (e.target.id === 'delYes') {
+    const s = symbols.find(x => x.id === editingId); if (!s) return;
+    try { await saveFiles([{ path: PATHS.rules, data: removeRule(F.rules, s.word), message: `Remove symbol ${s.word}` }], `Deleted “${s.english}”.`); loadForm(null); }
+    catch (err) { msg('formMsg', err.message, 'bad'); setStatus(''); }
+  }
+});
+$('saveSym').onclick = async () => {
+  const code = normCode($('fCode').value), english = $('fEnglish').value.trim(), cat = $('fCat').value;
+  let word = $('fWord').value.trim() || english.toUpperCase().replace(/[^A-Z0-9]/g, ''); if (cat === 'word') word = word.toUpperCase();
+  if (!code) return msg('formMsg', 'Build at least one cell for this symbol.', 'bad');
+  if (!english) return msg('formMsg', 'Enter the English meaning.', 'bad');
+  if (!word || /[\]\s]/.test(word)) return msg('formMsg', 'Enter a rules key without spaces.', 'bad');
+  const id = idFor(word, cat), clash = symbols.find(s => s.id === id && s.id !== editingId);
+  if (clash) return msg('formMsg', `The rules key ${word} is already used by “${clash.english}”.`, 'bad');
+  const old = symbols.find(s => s.id === editingId);
+  const tr = {}; $('trlist').querySelectorAll('input[data-lang]').forEach(i => { if (i.value.trim()) tr[i.dataset.lang] = i.value.trim(); });
+  const changes = [];
+  try {
+    changes.push({ path: PATHS.rules, data: upsertRule(F.rules, word, code, cat, old && old.word), message: `${old ? 'Update' : 'Add'} symbol ${word}` });
+    const meanings = { ...F.meanings }; if (old && old.word !== word) delete meanings[old.word];
+    meanings[word] = { english, category: cat };
+    changes.push({ path: PATHS.meanings, data: JSON.stringify(meanings, null, 2) + '\n', message: `Meaning of ${word}` });
+    if (cat !== 'punctuation') {
+      const oldEnglish = old && old.english.toLowerCase() !== english.toLowerCase() ? old.english : null;
+      for (const l of languages) {
+        const before = F.dicts[l.code] || newDictText(l.code, l.name), after = setDictEntry(before, english, tr[l.code] || '', oldEnglish);
+        if (after !== (F.dicts[l.code] || '')) changes.push({ path: PATHS.dict(l.code), data: after, message: `${l.name}: ${english}` });
+      }
+    }
+  } catch (err) { return msg('formMsg', err.message, 'bad'); }
+  $('saveSym').disabled = true;
+  try { await saveFiles(changes, `Saved “${english}”.`); editingId = id; loadForm(id); msg('formMsg', 'Saved to GitHub.', 'ok'); }
+  catch (err) { msg('formMsg', err.message, 'bad'); setStatus(''); }
+  finally { $('saveSym').disabled = false; }
+};
+
+// ================= owner: languages =================
+function renderLangList() {
+  const words = symbols.filter(s => s.category !== 'punctuation');
+  $('langList').innerHTML = [...languages].sort((a, b) => a.name.localeCompare(b.name)).map(l => {
+    const n = words.filter(s => s.tr[l.code]).length, pct = words.length ? Math.round(100 * n / words.length) : 0;
+    return `<li><div><b>${esc(l.name)}</b> <span class="cov">(${esc(l.code)}) · ${n} of ${words.length} symbols</span><div class="meter"><i style="width:${pct}%"></i></div></div><button class="btn small ghost danger" data-dellang="${esc(l.code)}">Hide</button></li>`;
+  }).join('') || '<li class="cov">No languages yet.</li>';
+}
+$('addLang').onclick = async () => {
+  const code = $('lCode').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, ''), name = $('lName').value.trim();
+  if (!code || !name) return msg('langMsg', 'Enter a short code (like F) and a name.', 'bad');
+  if (code === 'E') return msg('langMsg', 'E is reserved for English.', 'bad');
+  const langs = { ...F.langs, [code]: name }, changes = [{ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: `Language ${name}` }];
+  if (!F.langs[code] && !F.dicts[code]) changes.push({ path: PATHS.dict(code), data: newDictText(code, name), message: `Create ${name} dictionary` });
+  try { await saveFiles(changes, `Saved language ${name}.`); $('lCode').value = ''; $('lName').value = ''; msg('langMsg', ''); } catch (err) { msg('langMsg', err.message, 'bad'); setStatus(''); }
+};
+$('langList').addEventListener('click', async e => {
+  const b = e.target.closest('[data-dellang]'); if (!b) return;
+  if (b.dataset.confirm !== '1') { b.dataset.confirm = '1'; b.textContent = 'Confirm hide'; return; }
+  const langs = { ...F.langs }; delete langs[b.dataset.dellang];
+  try { await saveFiles([{ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: 'Hide language' }], 'Language hidden. Its dictionary file stays on GitHub; add the code again to bring it back.'); }
+  catch (err) { msg('langMsg', err.message, 'bad'); setStatus(''); }
+});
+
+// ================= views =================
+function show(v) {
+  if (v === 'manage' && $('tab-manage').hidden) v = 'translate';
+  for (const n of ['translate', 'browse', 'manage']) { $('view-' + n).hidden = n !== v; $('tab-' + n).setAttribute('aria-selected', String(n === v)); }
+  pref.set('view', v); if (v === 'browse') renderBrowse();
+}
+document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => show(b.dataset.view));
+function renderAll() {
+  reindex(); renderLangSelects(); renderLangList(); renderBrowse();
+  const shown = [...$('trlist').querySelectorAll('input[data-lang]')].map(i => i.dataset.lang).sort().join();
+  if (shown !== languages.map(l => l.code).sort().join()) renderTrList(symbols.find(s => s.id === editingId));
+  $('foot').textContent = `${symbols.length} symbols · ${languages.length + 1} languages`;
+}
+
+// ================= start =================
+renderCell(); renderInput(); renderCodeview(); renderTrList(null);
+if (gh.load()) canEdit = true;
+renderOwner();
+show(location.hash === '#manage' ? 'manage' : pref.get('view', 'translate'));
+loadAll().then(() => { if (canEdit) setStatus(''); }).catch(err => {
+  if (canEdit) { canEdit = false; renderOwner(); setStatus('Could not reach GitHub with the saved access key: ' + err.message + ' Sign in again on the Owner page.', 'err'); loadAll().catch(e => setStatus(e.message, 'err')); }
+  else setStatus(location.protocol === 'file:' ? 'Open this page from its website link. Opened as a file, the browser blocks reading data.json.' : err.message, 'err');
+});
+})();
+</script>
+
+</body>
+</html>
