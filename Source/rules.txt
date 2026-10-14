@@ -738,102 +738,173 @@
 # ***********************************************************************
 # SECTION 5: GRADE 1 ENGLISH SIGN LANGUAGE
 # ***********************************************************************
-
-
 1 [,]=| |1 -
 1 [“]=&  -
 1 [”]=| |Y -
 1 [.]=| |4 -
 1 [?]=| |? -
-1 [ADAM]=P--[O -
+1 [ADAM]=8P--[O0 -
+1 [ALIVE]=:S  -
 1 [ALL]=&XXXY -
+1 [AND]="WR1 -
 1 [ANGEL]=F=D -
 1 [ANIMAL]=@63Q -
+1 [ASSEMBLY HALL]=PCC?-==== -
 1 [ASK]=G33? -
 1 [BAD]=E' -
 1 [BAPTISM]=59L59 -
-1 [BEAUTIFUL]=SE-IE-I: -
+1 [BAPTIZE]=59L59 -
+1 [BEAUTIFUL]=@!ZA -
+1 [BETHEL]=PCC?-==== -
 1 [BIBLE]=E-I= -
 1 [BOOK]=E-I -
 1 [BOY]=6 -
 1 [BUILDING]=PCC? -
+1 [CHANGE]=FE0 -
+1 [CHERISH]=$N -
 1 [CHILD]=2 -
 1 [COME]=[333 -
+1 [COMPLETE]=&XXXY -
 1 [CONGREGATION]=&XY-LLL-==== -
+1 [COURAGEOUS]=H=J -
+1 [DAUGHTER]=8 -
+1 [DEATH]=_-' -
+1 [DEAD]=_-' -
+1 [DECLINE]==7- -
+1 [DESTROY]=F_-' -
+1 [DEVIL]=E35P -
 1 [DIE]=_-' -
 1 [EARTH]=--[O -
 1 [EAT]=33G -
-1 [EVE]=R--[O -
+1 [EQUAL]=X -
+1 [ETERNITY]=;B333O333O333O -
+1 [EVE]=8R--[O0 -
+1 [FAITH]=73G -
 1 [FALSE]=XX3XX -
 1 [FAMILY]=P-R-2 -
 1 [FOREVER]=;B333O333O333O -
 1 [FRUIT]=C?PCE7 -
 1 [FUTURE]=;B333O -
-1 [PARADISE]=--SE-IE-I: -
-
 1 [GIRL]=8 -
 1 [GIVE]=G-3C -
 1 [GOOD]=9A -
 1 [GO]=333O -
 1 [GROUP]=&XY -
 1 [HAPPY]=GC<> -
+1 [HEALTHY]=H=J -
 1 [HEAVEN]=--CEIC -
 1 [HELP]=G-=- -
-1 [HOLYSPIRIT]=H=J= -
+1 [HOLY SPIRIT]=H=JEE -
 1 [HONOR]=G3III -
-1 [HOWMANY]=?# -
+1 [HOUSE]=PCC? -
+1 [HOW MANY]=?# -
 1 [HOW]=?S: -
 1 [IMPROVE]=-7= -
-1 [JEHOVAHSWITNESSES]=LLL-==== -
+1 [INFORM]=G33HH -
+1 [I]=L[ -
+1 [JEHOVAH’S WITNESSES]=LLL-==== -
 1 [JEHOVAH]===== -
 1 [JESUS]=K=== -
-1 [KINGDOMHALL]=PCC?-==== -
+1 [KILL]=F_-' -
+1 [KINGDOM HALL]=PCC?-==== -
+1 [KINGDOM]=--()() -
 1 [KING]=()() -
+1 [LATER]=;B;B;B -
+1 [LEADER]=()() -
 1 [LEARN]=GCC[ -
+1 [LIFE]=:S -
+1 [LIVE]=:S -
 1 [LOVE]=$N -
+1 [LONG AGO]=;B[333 -
 1 [MAKE]=GE37 -
 1 [MAN]=P -
 1 [MARRIAGE]=P-R -
+1 [MEETING]=(-(-( -
+1 [MEANING]=X -
+1 [MEAN]=X -
 1 [ME]=L[ -
-1 [MIDDLE]=&33Y -
-1 [MONEY]=0=8 -
-1 [NAME]=8----0 -
+1 [MISSIONARY]=LG33HH -
+1 [MONEY]=KT. -
+1 [NAME]=8---0 -
+1 [NEW]=@QI -
+1 [NOW]=;B1 -
 1 [NO]=IE' -
 1 [NUMBER]=# -
+1 [OBEY]=GS -
 1 [OLD]=,(5 -
+1 [PARADISE]=--[O@!ZA -
 1 [PAST]=;B[333 -
+1 [PAIN]="S -
+1 [PEACE]=,-95-' -
 1 [PEOPLE]=LLL -
 1 [PERSON]=L -
+1 [PIONEER]=LG33HH -
 1 [PLACE]=-- -
 1 [PRAY]=,><' -
-1 [QUESTION]=? -
+1 [PREACHER]=LG33HH -
+1 [PREACH]=G33HH -
+1 [PROBLEM]="S -
+1 [PROGRESS]=-7= -
+1 [PROMISE]=G33&Y -
+1 [PROPHECY]=G33&Y -
+1 [PROPHESY]=G33&Y -
+1 [PROPHET]=LG33&Y -
+1 [PUBLISHER]=LG33HH -
 1 [RANSOM]=&3[O3Y -
-1 [REVELATION]=G33&Y33&Y -
+1 [RELY]=73G -
+1 [RESPECT]=G3III -
+1 [RESURRECTION]=,-6SL -
+1 [RESURRECT]=,-6SL -
+1 [RICHES]=KT. -
+1 [RICH]=KT. -
+1 [RULER]=()() -
+1 [RULE]=()() -
+1 [SAD]=GCS: -
+1 [SAME]=X -
 1 [SATAN]=E35P -
 1 [SAY]=G33 -
 1 [SEE]=G@-A -
+1 [SICK]=,9=5' -
+1 [SING]=G3IE3IE -
 1 [SONG]=G3IE3IE -
+1 [SON]=6 -
+1 [SOON]=;B5 -
+1 [SPEAK]=G33 -
 1 [STAR]=--@@@@ -
 1 [STRONG]=H=J -
+1 [SUFFER]="S -
+1 [SUPPORT]=G-=- -
 1 [TEACH]=GCCO -
+1 [TEMPLE]=PCC?-==== -
 1 [THINK]=G@@@ -
-1 [TIMEPASSING]=;B;B;B -
+1 [THOUGHT]=G@@@ -
+1 [TIME PASS]=;B;B;B -
 1 [TIME]=;B -
-1 [TIMOTHY]=P-@QI-G33==== -
+1 [TOGETHER]="WR1 -
 1 [TO]=O -
 1 [TREE]=C?PC -
 1 [TRUE]==333= -
+1 [TRUST]=73G -
+1 [TRUTH]==333= -
+1 [UNTRUE]=XX3XX -
 1 [WANT]=G-9 -
+1 [WAKE UP]=,-6SL -
+1 [WAR]=SFA@D: -
 1 [WATER]=595959 -
 1 [WEAK]=,9=5' -
 1 [WHAT]=?7 -
+1 [WHEN]=?;B -
 1 [WHERE]=?-- -
+1 [WHICH]=?1=" -
 1 [WHO]=?L -
+1 [WISDOM]=GC[O -
+1 [WISE]=GC[O -
 1 [WITH]="WR1 -
 1 [WOMAN]=R -
+1 [WORSEN]==7- -
 1 [WRITE]=(111 -
 1 [YES]=5I -
-1 [YOUNG]=@QI  -
+1 [YOUNG]=@QI -
 1 [YOU]=LO -
 
 
@@ -880,8 +951,7 @@
 
 
 
-
-# These rules creates the space that occurs between words.
+# These rules create the space that occurs between words.
 1 [ ]=  -
 
 # -------------------
