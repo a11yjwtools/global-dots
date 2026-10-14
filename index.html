@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@400;500;600;700&display=swap">
+<!--ANALYTICS-->
 <style id="gd-style">
 :root{
   color-scheme:light;
@@ -182,6 +183,36 @@ td.dots{font-size:.92rem;color:var(--muted);white-space:nowrap}
 details summary{cursor:pointer;font-family:var(--display);font-weight:600}
 .savebar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin:0 0 16px;padding:12px 16px;border-radius:14px;background:var(--gold-soft);border:1px solid var(--gold);color:var(--ink);font-weight:700}
 footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 24px}
+/* learn */
+.learn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.learn .lead{grid-column:1/-1}
+@media (max-width:860px){.learn{grid-template-columns:1fr}}
+.lesson h2{font-family:var(--display);font-size:1.45rem;margin:0 0 8px;letter-spacing:-.01em}
+.lesson p{margin:0 0 12px;max-width:68ch}
+.lesson .small,.examples.small{font-size:.9rem}
+.steps{margin:6px 0 0;padding-left:1.3em;display:grid;gap:6px}
+.cellintro{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.cellintro p{flex:1 1 240px;margin:0}
+.numcell{display:grid;grid-template-columns:repeat(2,40px);gap:10px 18px;padding:14px 20px;border-radius:16px;background:var(--tint);border:1px solid var(--line)}
+.numcell span{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;background:radial-gradient(circle at 38% 30%,#FFE7A8 0%,var(--gold) 45%,var(--gold-deep) 100%);color:#3A2700}
+details.chart{margin-top:14px}
+details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;color:var(--royal)}
+.cellchart{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;margin-top:8px}
+.cellchart .cc{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:.7rem;color:var(--muted)}
+.examples{display:flex;flex-direction:column;gap:10px}
+.ex{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 14px;border-radius:14px;background:var(--tint)}
+.ex .exm{flex:1 1 160px;min-width:0}
+.ex .exm b{font-family:var(--display);font-size:1.05rem}
+.ex .exm span{display:block;font-size:.82rem;color:var(--muted)}
+.sentence-ex{display:flex;flex-wrap:wrap;gap:14px 10px;align-items:flex-end;padding:14px;border-radius:14px;background:var(--tint)}
+.sentence-ex .w{display:flex;flex-direction:column;align-items:center;gap:6px}
+.sentence-ex .w small{font-family:var(--display);font-weight:600;font-size:.85rem}
+.sentence-ex .gap{width:22px;height:46px;border:1px dashed var(--line);border-radius:8px}
+.digits{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px}
+.digit{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:12px;background:var(--tint)}
+.digit b{font-family:var(--display);font-size:1.2rem}
+.copybtn{margin-top:14px}
+
 /* phone: Your symbols right above Build a cell */
 @media (max-width:600px){
   .tx{display:flex;flex-direction:column;gap:14px}
@@ -228,6 +259,7 @@ footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 2
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button role="tab" id="tab-translate" aria-selected="true" data-view="translate">Translate</button>
       <button role="tab" id="tab-browse" aria-selected="false" data-view="browse">Browse symbols</button>
+      <button role="tab" id="tab-learn" aria-selected="false" data-view="learn">Learn</button>
       <button role="tab" id="tab-manage" aria-selected="false" data-view="manage" hidden>Manage</button>
     </nav>
   </div>
@@ -283,6 +315,65 @@ footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 2
     </div>
     <p class="count" id="count"></p>
     <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="view-learn" hidden>
+  <div class="learn">
+    <div class="card lesson lead">
+      <p class="eyebrow">Start here</p>
+      <h2>How Global Dots works</h2>
+      <p>Global Dots writes meaning with <b>cells</b>. Each cell is a small grid of six dot positions, and every symbol is made of one or more cells. This page explains the parts.</p>
+      <ol class="steps">
+        <li><b>Raise dots</b> in the big cell on the Translate page.</li>
+        <li>Press <b>Add cell</b>. Add more cells to finish a symbol, then <b>Word space</b> before the next one.</li>
+        <li>Press <b>Translate</b> to read it in your language.</li>
+      </ol>
+    </div>
+
+    <div class="card lesson">
+      <p class="eyebrow">Lesson 1</p>
+      <h2>The cell</h2>
+      <div class="cellintro">
+        <div class="numcell" aria-hidden="true"><span>1</span><span>4</span><span>2</span><span>5</span><span>3</span><span>6</span></div>
+        <p>The six positions are numbered <b>1-2-3</b> down the left column and <b>4-5-6</b> down the right. A cell is named by its raised dots, for example “dots 1-2-4”. There are <b>63</b> different cells.</p>
+      </div>
+      <details class="chart">
+        <summary>Show all 63 cells</summary>
+                <div class="cellchart" id="cellChart"></div>
+      </details>
+    </div>
+
+    <div class="card lesson">
+      <p class="eyebrow">Lesson 2</p>
+      <h2>Cells make symbols</h2>
+      <p>A symbol is one or more cells written together, with no gap. Some symbols use one cell, others use several.</p>
+      <div class="examples" id="exSymbols"></div>
+    </div>
+
+    <div class="card lesson">
+      <p class="eyebrow">Lesson 3</p>
+      <h2>Spaces separate symbols</h2>
+      <p>Put a <b>word space</b> (an empty cell) between symbols, just as words are separated by spaces. Punctuation joins the symbol before it.</p>
+      <div id="exSentence"></div>
+    </div>
+
+    <div class="card lesson">
+      <p class="eyebrow">Lesson 4</p>
+      <h2>Numbers</h2>
+      <p>Start with the <b>number sign</b> (dots 3-4-5-6), then one cell for each digit.</p>
+      <div class="digits" id="exDigits"></div>
+    </div>
+
+    <div class="card lesson">
+      <p class="eyebrow">Lesson 5</p>
+      <h2>Punctuation and several meanings</h2>
+      <p>These cells mark punctuation:</p>
+      <div class="examples small" id="exPunct"></div>
+      <p id="multiIntro">Some cell patterns have more than one meaning. The Translate page shows every meaning so you can choose the one that fits:</p>
+      <div class="examples small" id="exMulti"></div>
+    </div>
+
   </div>
 </section>
 
@@ -396,7 +487,8 @@ function cellSVG(ch, size = 22) {
 const cellsSVG = (s, size) => `<span class="cells">${[...s].map(ch => cellSVG(ch, size)).join('')}</span>`;
 
 // ================= files → symbols =================
-const PATHS = { rules: 'Source/rules.txt', meanings: 'Source/symbol_meanings.json', langs: 'Languages/languages.json', dict: c => `Languages/${c}/dictionary.txt` };
+const PATHS = { rules: 'Source/rules.txt', meanings: 'Source/symbol_meanings.json', langs: 'Languages/languages.json', dict: c => `Languages/${(F.folders && F.folders[c]) || c}/dictionary.txt` };
+const KNOWN_NAMES = { S: 'Spanish', P: 'Portuguese', F: 'French', G: 'German', I: 'Italian', ZH: 'Chinese', CH: 'Chinese', CHS: 'Chinese', CN: 'Chinese', JA: 'Japanese', KO: 'Korean', RU: 'Russian', AR: 'Arabic', HI: 'Hindi' };
 const SECTION_END = '# These rules creates the space';
 const RULE_RE = /^1 \[([^\]]+)\]=(.*)$/;
 function splitLines(text) { const nl = text.includes('\r\n') ? '\r\n' : '\n'; return { lines: text.split(nl), nl }; }
@@ -424,8 +516,8 @@ function parseDict(text) {
   for (const raw of text.replace(/^﻿/, '').split(/\r?\n/)) {
     const l = raw.trim(); if (!l) continue;
     if (l.startsWith('#')) { const c = l.match(/Language Code:\s*([A-Za-z0-9_-]+)/i); if (c && !code) code = c[1].toUpperCase(); const n = l.match(/^#\s*(.+?)\s+Language Dictionary/i); if (n && !name) name = n[1]; continue; }
-    const i = l.indexOf('='); if (i < 0) continue;
-    const a = l.slice(0, i).trim().toLowerCase(), v = l.slice(i + 1).trim(); if (a && v && !map.has(a)) map.set(a, v);
+    const mm = l.match(/^(.*?)\s*(?:=|＝|\t)\s*(.*)$/); if (!mm) continue;
+    const a = mm[1].trim().replace(/^"|"$/g, '').toLowerCase(), v = mm[2].trim().replace(/^"|"$/g, ''); if (a && v && !map.has(a)) map.set(a, v);
   }
   return { map, code, name };
 }
@@ -492,7 +584,8 @@ const gh = {
     const t = await this.call('GET', this.url(p) + '?ref=' + encodeURIComponent(this.cfg.branch));
     if (!t) return null;
     const bin = atob((t.content || '').replace(/\n/g, '')); const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-    return { sha: t.sha, text: new TextDecoder('utf-8', { ignoreBOM: true }).decode(bytes) };
+    const enc = bytes[0] === 0xFF && bytes[1] === 0xFE ? 'utf-16le' : bytes[0] === 0xFE && bytes[1] === 0xFF ? 'utf-16be' : 'utf-8';
+    return { sha: t.sha, text: new TextDecoder(enc, { ignoreBOM: enc === 'utf-8' }).decode(bytes) };
   },
   async put(p, data, message) {
     const bytes = typeof data === 'string' ? new TextEncoder().encode(data) : data;
@@ -503,12 +596,13 @@ const gh = {
 };
 
 // ================= data loading =================
-let F = { rules: '', meanings: {}, langs: {}, dicts: {} };
+let F = { rules: '', meanings: {}, langs: {}, json: {}, folders: {}, dicts: {} };
 let symbols = [], languages = [], canEdit = false;
 async function readPublic(p) { const r = await fetch(p + '?t=' + Date.now(), { cache: 'no-store' }); if (!r.ok) throw new Error(`Could not load ${p} (${r.status}).`); return r.text(); }
 async function readOwner(p) { const f = await gh.get(p); if (!f) throw new Error(`${p} is missing in the repository.`); return f.text; }
 async function loadPublic() {
-  const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
+  const ver = '__BUILD_VERSION__';
+  const r = await fetch('data.json?v=' + (ver.startsWith('__') ? Date.now() : ver));
   if (!r.ok) throw new Error('Could not load the symbols (' + r.status + ').');
   const d = await r.json();
   languages = d.languages || [];
@@ -518,11 +612,18 @@ async function loadPublic() {
 async function loadAll() {
   if (!canEdit) return loadPublic();
   const read = readOwner;
-  const [rules, langsT, meaningsT] = await Promise.all([read(PATHS.rules), read(PATHS.langs), read(PATHS.meanings).catch(() => '{}')]);
-  const langs = JSON.parse(langsT), meanings = JSON.parse(meaningsT || '{}');
-  const dicts = {};
-  await Promise.all(Object.keys(langs).map(async c => { dicts[c] = await read(PATHS.dict(c)).catch(() => ''); }));
-  F = { rules, langs, meanings, dicts };
+  const listing = gh.call('GET', `/repos/${gh.cfg.repo}/contents/Languages?ref=${encodeURIComponent(gh.cfg.branch)}`);
+  const [rules, langsT, meaningsT, items] = await Promise.all([read(PATHS.rules), read(PATHS.langs).catch(() => '{}'), read(PATHS.meanings).catch(() => '{}'), listing]);
+  let json = {}; try { json = JSON.parse(langsT || '{}'); } catch (e) {}
+  const meanings = JSON.parse(meaningsT || '{}');
+  const dicts = {}, langs = {}, folders = {};
+  await Promise.all((items || []).filter(x => x.type === 'dir' && !/^[._]/.test(x.name)).map(async x => {
+    const code = x.name.toUpperCase(); if (code === 'E' || json[code] === false) return;
+    const txt = await read(`Languages/${x.name}/dictionary.txt`).catch(() => null); if (txt === null) return;
+    dicts[code] = txt; folders[code] = x.name;
+    langs[code] = (typeof json[code] === 'string' && json[code].trim()) || parseDict(txt).name || KNOWN_NAMES[code] || (x.name.length > 3 ? x.name : code);
+  }));
+  F = { rules, langs, json, folders, meanings, dicts };
   symbols = buildSymbols(F);
   languages = Object.entries(langs).map(([code, name]) => ({ code, name }));
   renderAll();
@@ -565,6 +666,7 @@ function vern(sym, lang) {
   const t = sym.tr[lang]; return t ? { text: t, ok: true } : { text: sym.english, ok: false };
 }
 const langName = c => c === 'E' ? 'English' : ((languages.find(l => l.code === c) || {}).name || c);
+const track = (name, data) => { try { if (window.umami && umami.track) umami.track(name, data); } catch (e) {} };
 const pref = { get(k, d) { try { return localStorage.getItem('gd.' + k) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('gd.' + k, v); } catch (e) {} } };
 
 // ================= translate =================
@@ -581,7 +683,7 @@ function paintCell(host, mask) { host.querySelectorAll('.dot').forEach(b => b.se
 buildCell($('bigcell'), () => cur, m => { cur = m; renderCell(); });
 buildCell($('minicell'), () => mCur, m => { mCur = m; paintCell($('minicell'), mCur); });
 function renderCell() { paintCell($('bigcell'), cur); $('cellPreview').textContent = cur ? 'Dots ' + [...dotsOf(toChar(cur))].join(' · ') : 'Tap the dots to raise them'; }
-let selected = new Set(), anchor = null, choice = {};
+let selected = new Set(), anchor = null, choice = {}, liveTx = false, inTx = false;
 function addCell() { if (!cur) { addSpace(); return; } input.push(toChar(cur)); cur = 0; selected.clear(); renderCell(); renderInput(); }
 function addSpace() { if (input.length && input[input.length - 1] !== ' ') input.push(' '); selected.clear(); renderInput(); }
 function renderInput() {
@@ -595,6 +697,7 @@ function renderInput() {
       : `<button class="chip${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="Cell with dots ${dotsOf(c)}${sel ? ', selected' : ''}" title="Dots ${dotsOf(c)} · tap to select">${cellSVG(c, 54)}</button>`;
   }).join('');
   renderSelBar();
+  if (liveTx && !inTx) translate();
 }
 function renderSelBar() {
   const n = selected.size;
@@ -620,9 +723,11 @@ $('selCopy').onclick = () => {
 };
 $('addCell').onclick = addCell; $('addSpace').onclick = addSpace;
 $('backspace').onclick = () => { if (cur) { cur = 0; renderCell(); } else if (selected.size) { $('selDel').click(); } else { input.pop(); renderInput(); } };
-$('clearAll').onclick = () => { input = []; cur = 0; selected.clear(); anchor = null; renderCell(); renderInput(); $('result').innerHTML = ''; };
+$('clearAll').onclick = () => { liveTx = false; input = []; cur = 0; selected.clear(); anchor = null; renderCell(); renderInput(); $('result').innerHTML = ''; };
 $('translateBtn').onclick = translate;
-$('result').addEventListener('click', e => { const b = e.target.closest('.mopt'); if (!b) return; choice[+b.dataset.seg] = +b.dataset.k; const keep = choice; translate(); choice = keep; });
+$('result').addEventListener('click', e => {
+  if (e.target.id === 'copyTx') { const t = $('sentenceText').cloneNode(true); t.querySelectorAll('.alts').forEach(x => x.remove()); const txt = t.textContent.trim(); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { e.target.textContent = 'Copied'; setTimeout(() => { if ($('copyTx')) $('copyTx').textContent = 'Copy translation'; }, 1500); }).catch(() => { const r = document.createRange(); r.selectNodeContents($('sentenceText')); getSelection().removeAllRanges(); getSelection().addRange(r); }); return; }
+  const b = e.target.closest('.mopt'); if (!b) return; choice[+b.dataset.seg] = +b.dataset.k; const keep = choice; translate(); choice = keep; });
 document.addEventListener('keydown', e => {
   if ($('view-translate').hidden) return;
   const t = e.target;
@@ -636,9 +741,14 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'Escape' && selected.size) { $('selNone').click(); e.preventDefault(); }
 });
 function translate() {
+  inTx = true; try { translateNow(); } finally { inTx = false; }
+}
+function translateNow() {
   if (cur) addCell();
+  if (!liveTx) track('Translate', { language: langName($('langSel').value || 'E') });
+  liveTx = true;
   const lang = $('langSel').value || 'E', str = input.join('').trim(), out = $('result');
-  if (!str) { out.innerHTML = '<p class="note">Build at least one cell first.</p>'; return; }
+  if (!str) { out.innerHTML = liveTx && input.length === 0 ? '' : '<p class="note">Build at least one cell first.</p>'; return; }
   let sentence = '', rows = '', missing = 0, unknown = 0, multi = '';
   const segs = segment(str);
   segs.forEach((s, si) => {
@@ -666,7 +776,7 @@ function translate() {
   let notes = '';
   if (missing) notes += `<p class="note warn">${missing} symbol${missing > 1 ? 's have' : ' has'} no ${esc(langName(lang))} translation yet, so ${missing > 1 ? 'they are' : 'it is'} shown in English, in italics.</p>`;
   if (unknown) notes += `<p class="note bad">${unknown} cell${unknown > 1 ? 's are' : ' is'} not part of any symbol in the system.</p>`;
-  out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(langName(lang))}</span><p class="sentence">${sentence}</p>${multi ? `<div class="meanings"><p class="eyebrow">Symbols with several meanings</p><ul>${multi}</ul><p class="mhint">Tap a meaning to use it in the sentence.</p></div>` : ''}</div>${notes ? `<div class="notes">${notes}</div>` : ''}
+  out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(langName(lang))}</span><p class="sentence" id="sentenceText">${sentence}</p>${multi ? `<div class="meanings"><p class="eyebrow">Symbols with several meanings</p><ul>${multi}</ul><p class="mhint">Tap a meaning to use it in the sentence.</p></div>` : ''}<button class="btn small copybtn" id="copyTx">Copy translation</button></div>${notes ? `<div class="notes">${notes}</div>` : ''}
     <div class="tablewrap"><table><thead><tr><th>Cells</th><th>Dots</th><th>English</th><th>${esc(langName(lang))}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
@@ -679,7 +789,7 @@ function renderLangSelects() {
     sel.value = opts.some(o => o.code === keep) ? keep : 'E';
   }
 }
-['langSel', 'langSel2'].forEach(id => $(id).addEventListener('change', e => { pref.set(id, e.target.value); if (id === 'langSel2') renderBrowse(); else if ($('result').innerHTML) translate(); }));
+['langSel', 'langSel2'].forEach(id => $(id).addEventListener('change', e => { pref.set(id, e.target.value); track('Choose language', { language: langName(e.target.value) }); if (id === 'langSel2') renderBrowse(); else { if ($('result').innerHTML) translate(); learnDone = false; if (!$('view-learn').hidden) renderLearn(); } }));
 function renderBrowse() {
   const q = $('q').value.trim().toLowerCase(), lang = $('langSel2').value || 'E', f = $('filt').value;
   const qDots = /^[1-6 ]+$/.test(q) ? q.split(/\s+/).filter(Boolean) : null;
@@ -788,10 +898,10 @@ $('upApply').onclick = async () => {
   if (rules.length > 1) return msg('upMsg', 'Upload only one rules.txt at a time.', 'bad');
   const changes = [];
   if (rules[0]) changes.push({ path: PATHS.rules, data: rules[0].bytes, message: 'Update rules.txt' });
-  const langs = { ...F.langs }; let langsChanged = false;
+  const langs = { ...F.json }; let langsChanged = false;
   for (const u of dicts) {
-    if (!langs[u.lang]) { langs[u.lang] = u.newName; langsChanged = true; }
-    changes.push({ path: PATHS.dict(u.lang), data: u.bytes, message: `Update ${langs[u.lang]} dictionary` });
+    if (!F.langs[u.lang] && u.newName) { langs[u.lang] = u.newName; langsChanged = true; }
+    changes.push({ path: PATHS.dict(u.lang), data: u.bytes, message: `Update ${F.langs[u.lang] || u.newName || u.lang} dictionary` });
   }
   if (langsChanged) changes.push({ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: 'Add language' });
   $('upApply').disabled = true;
@@ -879,30 +989,74 @@ $('addLang').onclick = async () => {
   const code = $('lCode').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, ''), name = $('lName').value.trim();
   if (!code || !name) return msg('langMsg', 'Enter a short code (like F) and a name.', 'bad');
   if (code === 'E') return msg('langMsg', 'E is reserved for English.', 'bad');
-  const langs = { ...F.langs, [code]: name }, changes = [{ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: `Language ${name}` }];
-  if (!F.langs[code] && !F.dicts[code]) changes.push({ path: PATHS.dict(code), data: newDictText(code, name), message: `Create ${name} dictionary` });
+  const langs = { ...F.json, [code]: name }, changes = [{ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: `Language ${name}` }];
+  if (!F.dicts[code]) changes.push({ path: PATHS.dict(code), data: newDictText(code, name), message: `Create ${name} dictionary` });
   try { await saveFiles(changes, `Saved language ${name}.`); $('lCode').value = ''; $('lName').value = ''; msg('langMsg', ''); } catch (err) { msg('langMsg', err.message, 'bad'); setStatus(''); }
 };
 $('langList').addEventListener('click', async e => {
   const b = e.target.closest('[data-dellang]'); if (!b) return;
   if (b.dataset.confirm !== '1') { b.dataset.confirm = '1'; b.textContent = 'Confirm hide'; return; }
-  const langs = { ...F.langs }; delete langs[b.dataset.dellang];
-  try { await saveFiles([{ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: 'Hide language' }], 'Language hidden. Its dictionary file stays on GitHub; add the code again to bring it back.'); }
+  const langs = { ...F.json, [b.dataset.dellang]: false };
+  try { await saveFiles([{ path: PATHS.langs, data: JSON.stringify(langs, null, 2) + '\n', message: 'Hide language' }], 'Language hidden. Its dictionary stays on GitHub; use Add or rename with the same code to show it again.'); }
   catch (err) { msg('langMsg', err.message, 'bad'); setStatus(''); }
 });
+
+// ================= learn =================
+let learnDone = false;
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const wordSyms = () => symbols.filter(s => s.category !== 'punctuation');
+function exampleRow(s, size = 34) {
+  const lang = $('langSel').value || 'E', v = vern(s, lang);
+  const n = s.code.length;
+  return `<div class="ex">${cellsSVG(s.code, size)}<div class="exm"><b>${esc(s.english)}</b>${lang !== 'E' && s.category !== 'punctuation' ? ` <span>${v.ok ? esc(langName(lang)) + ': ' + esc(v.text) : 'No ' + esc(langName(lang)) + ' translation yet'}</span>` : ''}<span>${n} cell${n > 1 ? 's' : ''} · dots ${esc(dotsStr(s.code))}</span></div></div>`;
+}
+function renderLearn() {
+  if (learnDone || !symbols.length) return;
+  learnDone = true;
+  // all 63 cells, ordered by number of dots, then by dot numbers
+  const masks = [...Array(63)].map((_, i) => i + 1).sort((a, b) => dotsOf(toChar(a)).length - dotsOf(toChar(b)).length || dotsOf(toChar(a)).localeCompare(dotsOf(toChar(b))));
+  $('cellChart').innerHTML = masks.map(m => `<div class="cc" title="Dots ${dotsOf(toChar(m))}">${cellSVG(toChar(m), 30)}<span>${dotsOf(toChar(m))}</span></div>`).join('');
+  // examples of short and long symbols
+  const words = wordSyms(), lang = $('langSel').value || 'E';
+  const prefer = list => list.sort((a, b) => (!!b.tr[lang]) - (!!a.tr[lang]) || a.english.localeCompare(b.english));
+  const picks = [];
+  const one = prefer(words.filter(s => s.code.length === 1))[0], two = prefer(words.filter(s => s.code.length === 2))[0];
+  const long = prefer(words.filter(s => s.code.length >= 4)).sort((a, b) => (!!b.tr[lang]) - (!!a.tr[lang]))[0];
+  [one, two, long].forEach(s => { if (s && !picks.includes(s)) picks.push(s); });
+  $('exSymbols').innerHTML = picks.map(s => exampleRow(s)).join('');
+  // a short sentence
+  const byWord = w => symbols.find(s => s.word === w);
+  let parts = ['JEHOVAH', 'LOVE', 'PEOPLE'].map(byWord).filter(Boolean);
+  if (parts.length < 3) parts = prefer(words.filter(s => s.code.length <= 2)).slice(0, 3);
+  const stop = symbols.find(s => s.category === 'punctuation' && s.english === '.');
+  const code = parts.map(s => s.code).join(' ') + (stop ? stop.code : '');
+  const tx = parts.map(s => vern(s, lang).text).join(' ') + (stop ? '.' : '');
+  $('exSentence').innerHTML = `<div class="sentence-ex">${parts.map((s, i) => `${i ? '<span class="gap" title="Word space"></span>' : ''}<span class="w">${cellsSVG(s.code + (stop && i === parts.length - 1 ? stop.code : ''), 34)}<small>${esc(s.english)}${stop && i === parts.length - 1 ? ' .' : ''}</small></span>`).join('')}</div>
+    <div class="ex" style="margin-top:10px"><div class="exm"><b>${esc(tx)}</b><span>${esc(langName(lang))} · the dashed boxes are word spaces</span></div></div>`;
+  // numbers
+  $('exDigits').innerHTML = `<div class="digit">${cellSVG('#', 34)}<b>#</b><small>dots 3456</small></div>` +
+    '1234567890'.split('').map(d => { const L = 'JABCDEFGHI'[+d]; return `<div class="digit">${cellsSVG('#' + L, 30)}<b>${d}</b></div>`; }).join('');
+  // punctuation and several meanings
+  $('exPunct').innerHTML = symbols.filter(s => s.category === 'punctuation').map(s => exampleRow(s, 30)).join('') || '<p class="small">No punctuation symbols yet.</p>';
+  const multi = [...byCode.entries()].filter(([, l]) => l.length > 1);
+  $('multiIntro').hidden = !multi.length;
+  $('exMulti').innerHTML = multi.map(([c, l]) => `<div class="ex">${cellsSVG(c, 30)}<div class="exm"><b>${l.map(s => esc(vern(s, lang).text)).join(' <span style="display:inline;color:var(--muted)">or</span> ')}</b><span>dots ${esc(dotsStr(c))}</span></div></div>`).join('');
+}
+
 
 // ================= views =================
 function show(v) {
   if (v === 'manage' && $('tab-manage').hidden) v = 'translate';
-  for (const n of ['translate', 'browse', 'manage']) { $('view-' + n).hidden = n !== v; $('tab-' + n).setAttribute('aria-selected', String(n === v)); }
-  pref.set('view', v); if (v === 'browse') renderBrowse();
+  if (!['translate', 'browse', 'learn', 'manage'].includes(v)) v = 'translate';
+  for (const n of ['translate', 'browse', 'learn', 'manage']) { $('view-' + n).hidden = n !== v; $('tab-' + n).setAttribute('aria-selected', String(n === v)); }
+  pref.set('view', v); if (v === 'browse') renderBrowse(); if (v === 'learn') renderLearn(); track('Open ' + v);
 }
 document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => show(b.dataset.view));
 function renderAll() {
-  reindex(); renderLangSelects(); renderLangList(); renderBrowse();
+  reindex(); renderLangSelects(); renderLangList(); renderBrowse(); learnDone = false; if (!$('view-learn').hidden) renderLearn();
   const shown = [...$('trlist').querySelectorAll('input[data-lang]')].map(i => i.dataset.lang).sort().join();
   if (shown !== languages.map(l => l.code).sort().join()) renderTrList(symbols.find(s => s.id === editingId));
-  $('foot').textContent = `${symbols.length} symbols · ${languages.length + 1} languages`;
+  $('foot').innerHTML = `${symbols.length} symbols · ${languages.length + 1} languages · <a href="dictionary-template.txt" download style="color:inherit">Blank dictionary for a new language</a>` + (window.GD_ANALYTICS ? ' · Visits are counted anonymously, without cookies' : '');
 }
 
 // ================= start =================
