@@ -183,6 +183,12 @@ td.dots{font-size:.92rem;color:var(--muted);white-space:nowrap}
 details summary{cursor:pointer;font-family:var(--display);font-weight:600}
 .savebar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin:0 0 16px;padding:12px 16px;border-radius:14px;background:var(--gold-soft);border:1px solid var(--gold);color:var(--ink);font-weight:700}
 footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 24px}
+.topright{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.uilang{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.uil{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:99px;padding:5px 12px;font-family:var(--display);font-weight:500;font-size:.88rem;cursor:pointer}
+.uil:hover{border-color:var(--royal);color:var(--ink)}
+.uil[aria-pressed="true"]{background:var(--royal);border-color:var(--royal);color:var(--royal-ink)}
+@media (max-width:600px){.topright{align-items:stretch;width:100%}.uilang{justify-content:flex-start}}
 /* learn */
 .learn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
 .learn .lead{grid-column:1/-1}
@@ -258,16 +264,24 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
     <div class="brand">
       <div class="logo" aria-hidden="true"><svg width="30" height="40" viewBox="0 0 30 40"><circle cx="7" cy="7" r="5.5" fill="#F0B233"/><circle cx="23" cy="7" r="5.5" fill="#F0B233" opacity=".3"/><circle cx="7" cy="20" r="5.5" fill="#F0B233"/><circle cx="23" cy="20" r="5.5" fill="#F0B233"/><circle cx="7" cy="33" r="5.5" fill="#F0B233" opacity=".3"/><circle cx="23" cy="33" r="5.5" fill="#F0B233"/></svg></div>
       <div>
-        <h1>Global <em>Dots</em> Symbol Finder</h1>
-        <p class="tagline">Raise the dots, build your symbols, and read them in your own language.</p>
+        <h1 data-i18n-html="title_html">Global <em>Dots</em> Symbol Finder</h1>
+        <p class="tagline" data-i18n="tagline">Raise the dots, build your symbols, and read them in your own language.</p>
       </div>
     </div>
-    <nav class="tabs" role="tablist" aria-label="Sections">
-      <button role="tab" id="tab-translate" aria-selected="true" data-view="translate">Translate</button>
-      <button role="tab" id="tab-browse" aria-selected="false" data-view="browse">Browse symbols</button>
-      <button role="tab" id="tab-learn" aria-selected="false" data-view="learn">Learn</button>
-      <button role="tab" id="tab-manage" aria-selected="false" data-view="manage" hidden>Manage</button>
-    </nav>
+    <div class="topright">
+      <div class="uilang" role="group" aria-label="Language">
+        <button class="uil" data-ui="en" lang="en">English</button>
+        <button class="uil" data-ui="es" lang="es">Español</button>
+        <button class="uil" data-ui="pt" lang="pt">Português</button>
+        <button class="uil" data-ui="zh" lang="zh">中文</button>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button role="tab" id="tab-translate" aria-selected="true" data-view="translate" data-i18n="tab_translate">Translate</button>
+        <button role="tab" id="tab-browse" aria-selected="false" data-view="browse" data-i18n="tab_browse">Browse symbols</button>
+        <button role="tab" id="tab-learn" aria-selected="false" data-view="learn" data-i18n="tab_learn">Learn</button>
+        <button role="tab" id="tab-manage" aria-selected="false" data-view="manage" hidden>Manage</button>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -277,35 +291,32 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
 <section id="view-translate">
   <div class="tx">
     <div class="card pad">
-      <p class="eyebrow" style="align-self:flex-start;margin:0">Build a cell</p>
+      <p class="eyebrow" style="align-self:flex-start;margin:0" data-i18n="build_cell">Build a cell</p>
       <div class="bigcell" id="bigcell" aria-label="Six-dot cell"></div>
       <div class="preview" id="cellPreview">Tap the dots to raise them</div>
       <div class="row center">
-        <button class="btn gold" id="addCell">Add cell</button>
-        <button class="btn" id="addSpace">Word space</button>
+        <button class="btn gold" id="addCell" data-i18n="add_cell">Add cell</button>
+        <button class="btn" id="addSpace" data-i18n="word_space">Word space</button>
       </div>
       <div class="row center">
-        <button class="btn ghost" id="backspace">Undo</button>
-        <button class="btn ghost danger" id="clearAll">Clear all</button>
+        <button class="btn ghost" id="backspace" data-i18n="undo">Undo</button>
+        <button class="btn ghost danger" id="clearAll" data-i18n="clear_all">Clear all</button>
       </div>
-      <p class="hint">Keyboard: <kbd>1</kbd>–<kbd>6</kbd> dots · <kbd>Space</kbd> add cell · <kbd>Backspace</kbd> undo · <kbd>Enter</kbd> translate</p>
+      <p class="hint" data-i18n-html="hint_html">Keyboard: <kbd>1</kbd>–<kbd>6</kbd> dots · <kbd>Space</kbd> add cell · <kbd>Backspace</kbd> undo · <kbd>Enter</kbd> translate</p>
     </div>
     <div class="card outcard">
-      <p class="eyebrow">Your symbols</p>
+      <p class="eyebrow" data-i18n="your_symbols">Your symbols</p>
       <div class="strip" id="inputwin"></div>
       <div class="selbar" id="selBar" hidden>
         <span class="selcount" id="selCount">Tap symbols to select them</span>
-        <button class="btn small" id="selAll">Select all</button>
-        <button class="btn small gold" id="selCopy" disabled title="Add a copy of the selected symbols at the end">Repeat</button>
-        <button class="btn small ghost danger" id="selDel" disabled>Delete</button>
-        <button class="btn small ghost" id="selNone" disabled>Deselect</button>
+        <button class="btn small" id="selAll" data-i18n="select_all">Select all</button>
+        <button class="btn small gold" id="selCopy" disabled data-i18n="repeat" data-i18n-title="repeat_title">Repeat</button>
+        <button class="btn small ghost danger" id="selDel" disabled data-i18n="delete">Delete</button>
+        <button class="btn small ghost" id="selNone" disabled data-i18n="deselect">Deselect</button>
       </div>
       <div class="go">
-        <div class="field" style="flex:1 1 200px">
-          <label for="langSel">Translate into</label>
-          <select id="langSel"></select>
-        </div>
-        <button class="btn primary" id="translateBtn">Translate</button>
+        <div class="field" hidden><select id="langSel"></select></div>
+        <button class="btn primary" id="translateBtn" data-i18n="translate_btn">Translate</button>
       </div>
       <div class="result" id="result"></div>
     </div>
@@ -315,9 +326,9 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
 <section id="view-browse" hidden>
   <div class="card">
     <div class="toolbar">
-      <div class="field grow"><label for="q">Search by word, translation or dot numbers</label><input type="search" id="q" placeholder="love, amor, 123456"></div>
-      <div class="field"><label for="langSel2">Show translation in</label><select id="langSel2"></select></div>
-      <div class="field"><label for="filt">Show</label><select id="filt"><option value="all">All symbols</option><option value="missing">Missing translation</option><option value="done">Translated</option></select></div>
+      <div class="field grow"><label for="q" data-i18n="search_label">Search by word, translation or dot numbers</label><input type="search" id="q" placeholder="love, amor, 123456" data-i18n-ph="search_ph"></div>
+      <div class="field" hidden><select id="langSel2"></select></div>
+      <div class="field"><label for="filt" data-i18n="show">Show</label><select id="filt"><option value="all" data-i18n="f_all">All symbols</option><option value="missing" data-i18n="f_missing">Missing translation</option><option value="done" data-i18n="f_done">Translated</option></select></div>
     </div>
     <p class="count" id="count"></p>
     <div class="grid" id="grid"></div>
@@ -327,59 +338,49 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
 <section id="view-learn" hidden>
   <div class="learn">
     <div class="card lesson lead">
-      <p class="eyebrow">Start here</p>
-      <h2>How Global Dots works</h2>
-      <p>Global Dots writes meaning with <b>cells</b>. Each cell is a small grid of six dot positions, and every symbol is made of one or more cells. This page explains the parts.</p>
+      <p class="eyebrow" data-i18n="start_here">Start here</p>
+      <h2 data-i18n="how_title">How Global Dots works</h2>
+      <p data-i18n-html="how_p_html"></p>
       <ol class="steps">
-        <li><b>Raise dots</b> in the big cell on the Translate page.</li>
-        <li>Press <b>Add cell</b>. Add more cells to finish a symbol, then <b>Word space</b> before the next one.</li>
-        <li>Press <b>Translate</b> to read it in your language.</li>
+        <li data-i18n-html="step1_html"></li>
+        <li data-i18n-html="step2_html"></li>
+        <li data-i18n-html="step3_html"></li>
       </ol>
     </div>
 
     <div class="card lesson">
-      <p class="eyebrow">Lesson 1</p>
-      <h2>The cell</h2>
+      <p class="eyebrow" data-i18n="lesson1">Lesson 1</p>
+      <h2 data-i18n="l1_title">The cell</h2>
       <div class="cellintro">
         <div class="numcell" aria-hidden="true"><span>1</span><span>4</span><span>2</span><span>5</span><span>3</span><span>6</span></div>
-        <p>The six positions are numbered <b>1-2-3</b> down the left column and <b>4-5-6</b> down the right. A cell is named by its raised dots, for example “dots 1-2-4”. There are <b>63</b> different cells.</p>
+        <p data-i18n-html="l1_p_html"></p>
       </div>
       <details class="chart">
-        <summary>Show all 63 cells</summary>
-                <div class="cellchart" id="cellChart"></div>
+        <summary data-i18n="show63">Show all 63 cells</summary>
+        <div class="cellchart" id="cellChart"></div>
       </details>
     </div>
 
     <div class="card lesson">
-      <p class="eyebrow">Lesson 2</p>
-      <h2>Cells make symbols</h2>
-      <p>A symbol is one or more cells written together, with no gap. Some symbols use one cell, others use several.</p>
+      <p class="eyebrow" data-i18n="lesson2">Lesson 2</p>
+      <h2 data-i18n="l2_title">Cells make symbols</h2>
+      <p data-i18n="l2_p"></p>
       <div class="examples" id="exSymbols"></div>
     </div>
 
     <div class="card lesson">
-      <p class="eyebrow">Lesson 3</p>
-      <h2>Spaces separate symbols</h2>
-      <p>Put a <b>word space</b> (an empty cell) between symbols, just as words are separated by spaces. Punctuation marks are written the same way: as their own cell, with a space before them.</p>
+      <p class="eyebrow" data-i18n="lesson3">Lesson 3</p>
+      <h2 data-i18n="l3_title">Spaces separate symbols</h2>
+      <p data-i18n-html="l3_p_html"></p>
       <div id="exSentence"></div>
     </div>
 
     <div class="card lesson">
-      <p class="eyebrow">Lesson 4</p>
-      <h2>Numbers</h2>
-      <p>Start with the <b>number sign</b> (dots 3-4-5-6), then one cell for each digit.</p>
+      <p class="eyebrow" data-i18n="lesson4">Lesson 4</p>
+      <h2 data-i18n="l4_title">Numbers</h2>
+      <p data-i18n-html="l4_p_html"></p>
       <div class="digits" id="exDigits"></div>
     </div>
-
-    <div class="card lesson">
-      <p class="eyebrow">Lesson 5</p>
-      <h2>Punctuation and several meanings</h2>
-      <p>Each punctuation mark is one cell, separated from the symbols around it by a space. An example of each:</p>
-      <div class="examples small" id="exPunct"></div>
-      <p id="multiIntro" style="margin-top:16px">Some cells have more than one meaning. The rest of the sentence shows which one is meant, and the Translate page shows every meaning so you can choose the one that fits. For example:</p>
-      <div class="examples small" id="exMulti"></div>
-    </div>
-
   </div>
 </section>
 
@@ -674,6 +675,193 @@ function vern(sym, lang) {
 const langName = c => c === 'E' ? 'English' : ((languages.find(l => l.code === c) || {}).name || c);
 const track = (name, data) => { try { if (window.umami && umami.track) umami.track(name, data); } catch (e) {} };
 const pref = { get(k, d) { try { return localStorage.getItem('gd.' + k) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('gd.' + k, v); } catch (e) {} } };
+// ================= interface languages =================
+const UI_LANGS = { en: 'English', es: 'Español', pt: 'Português', zh: '中文' };
+const STR = {
+  en: {
+    title_html: 'Global <em>Dots</em> Symbol Finder',
+    tagline: 'Raise the dots, build your symbols, and read them in your own language.',
+    tab_translate: 'Translate', tab_browse: 'Browse symbols', tab_learn: 'Learn',
+    build_cell: 'Build a cell', tap_dots: 'Tap the dots to raise them', dots: 'Dots', dots_lc: 'dots',
+    add_cell: 'Add cell', word_space: 'Word space', undo: 'Undo', clear_all: 'Clear all',
+    hint_html: 'Keyboard: <kbd>1</kbd>–<kbd>6</kbd> dots · <kbd>Space</kbd> add cell · <kbd>Backspace</kbd> undo · <kbd>Enter</kbd> translate',
+    your_symbols: 'Your symbols',
+    empty_html: 'Raise dots in the cell, then press <b>Add cell</b>. Your symbols line up here.',
+    sel_hint: 'Tap symbols to select them', n_selected: '{n} selected', select_all: 'Select all',
+    repeat: 'Repeat', repeat_title: 'Add a copy of the selected symbols at the end', delete: 'Delete', deselect: 'Deselect',
+    translate_btn: 'Translate', need_cell: 'Build at least one cell first.',
+    cell_aria: 'Cell with dots {d}', selected_sfx: 'selected', tap_select: 'tap to select',
+    th_cells: 'Cells', th_dots: 'Dots', th_english: 'English',
+    pill_number: 'number', number_n: 'number {n}', pill_unknown: 'not in the system', pill_found: 'found',
+    pill_missing: 'no translation yet', pill_meanings: '{n} meanings', or: 'or',
+    note_missing: '{n} of these symbols have no translation yet, so they are shown in English, in italics.',
+    note_nodict: 'There is no dictionary for this language yet, so the meanings are shown in English.',
+    note_unknown: '{n} of these cells are not part of any symbol in the system.',
+    several: 'Symbols with several meanings', tap_meaning: 'Tap a meaning to use it in the sentence.',
+    copy_tx: 'Copy translation', copied: 'Copied',
+    search_label: 'Search by word, translation or dot numbers', search_ph: 'love, amor, 123456',
+    show: 'Show', f_all: 'All symbols', f_missing: 'Missing translation', f_done: 'Translated',
+    count: '{a} of {b} symbols', no_tr: 'No translation yet', use_in_tx: 'Use in Translate', no_match: 'No symbols match that search.',
+    foot: '{s} symbols · {l} languages', blank_dict: 'Blank dictionary for a new language', anon: 'Visits are counted anonymously, without cookies',
+    load_err: 'The symbols could not be loaded. Please try again later.', file_err: 'Open this page from its website link to see the symbols.',
+    start_here: 'Start here', how_title: 'How Global Dots works',
+    how_p_html: 'Global Dots writes meaning with <b>cells</b>. Each cell is a small grid of six dot positions, and every symbol is made of one or more cells. This page explains the parts.',
+    step1_html: '<b>Raise dots</b> in the big cell on the Translate page.',
+    step2_html: 'Press <b>Add cell</b>. Add more cells to finish a symbol, then <b>Word space</b> before the next one.',
+    step3_html: 'Press <b>Translate</b> to read it in your language.',
+    lesson1: 'Lesson 1', lesson2: 'Lesson 2', lesson3: 'Lesson 3', lesson4: 'Lesson 4',
+    l1_title: 'The cell',
+    l1_p_html: 'The six positions are numbered <b>1-2-3</b> down the left column and <b>4-5-6</b> down the right. A cell is named by its raised dots, for example “dots 1-2-4”. There are <b>63</b> different cells.',
+    show63: 'Show all 63 cells',
+    l2_title: 'Cells make symbols', l2_p: 'A symbol is one or more cells written together, with no gap. Some symbols use one cell, others use several.',
+    l3_title: 'Spaces separate symbols',
+    l3_p_html: 'Put a <b>word space</b> (an empty cell) between symbols, just as words are separated by spaces. Punctuation marks are written the same way: as their own cell, with a space before them.',
+    l4_title: 'Numbers', l4_p_html: 'Start with the <b>number sign</b> (dots 3-4-5-6), then one cell for each digit.',
+    cell_1: '1 cell', cell_n: '{n} cells', dashed: 'The dashed boxes are word spaces.'
+  },
+  es: {
+    title_html: 'Buscador de símbolos Global <em>Dots</em>',
+    tagline: 'Levante los puntos, forme sus símbolos y léalos en su propio idioma.',
+    tab_translate: 'Traducir', tab_browse: 'Ver símbolos', tab_learn: 'Aprender',
+    build_cell: 'Forme una celda', tap_dots: 'Toque los puntos para levantarlos', dots: 'Puntos', dots_lc: 'puntos',
+    add_cell: 'Añadir celda', word_space: 'Espacio', undo: 'Deshacer', clear_all: 'Borrar todo',
+    hint_html: 'Teclado: <kbd>1</kbd>–<kbd>6</kbd> puntos · <kbd>Espacio</kbd> añadir celda · <kbd>Retroceso</kbd> deshacer · <kbd>Intro</kbd> traducir',
+    your_symbols: 'Sus símbolos',
+    empty_html: 'Levante puntos en la celda y pulse <b>Añadir celda</b>. Sus símbolos aparecerán aquí.',
+    sel_hint: 'Toque los símbolos para seleccionarlos', n_selected: '{n} seleccionados', select_all: 'Seleccionar todo',
+    repeat: 'Repetir', repeat_title: 'Añadir una copia de los símbolos seleccionados al final', delete: 'Eliminar', deselect: 'Quitar selección',
+    translate_btn: 'Traducir', need_cell: 'Primero forme al menos una celda.',
+    cell_aria: 'Celda con los puntos {d}', selected_sfx: 'seleccionada', tap_select: 'toque para seleccionar',
+    th_cells: 'Celdas', th_dots: 'Puntos', th_english: 'Inglés',
+    pill_number: 'número', number_n: 'número {n}', pill_unknown: 'no está en el sistema', pill_found: 'encontrado',
+    pill_missing: 'sin traducción aún', pill_meanings: '{n} significados', or: 'o',
+    note_missing: '{n} de estos símbolos aún no tienen traducción, por eso aparecen en inglés y en cursiva.',
+    note_nodict: 'Aún no hay diccionario para este idioma, por eso los significados aparecen en inglés.',
+    note_unknown: '{n} de estas celdas no forman parte de ningún símbolo del sistema.',
+    several: 'Símbolos con varios significados', tap_meaning: 'Toque un significado para usarlo en la frase.',
+    copy_tx: 'Copiar traducción', copied: 'Copiado',
+    search_label: 'Buscar por palabra, traducción o números de puntos', search_ph: 'amor, love, 123456',
+    show: 'Mostrar', f_all: 'Todos los símbolos', f_missing: 'Sin traducción', f_done: 'Traducidos',
+    count: '{a} de {b} símbolos', no_tr: 'Sin traducción aún', use_in_tx: 'Usar en Traducir', no_match: 'Ningún símbolo coincide con la búsqueda.',
+    foot: '{s} símbolos · {l} idiomas', blank_dict: 'Diccionario en blanco para un idioma nuevo', anon: 'Las visitas se cuentan de forma anónima, sin cookies',
+    load_err: 'No se pudieron cargar los símbolos. Inténtelo más tarde.', file_err: 'Abra esta página desde su enlace web para ver los símbolos.',
+    start_here: 'Empiece aquí', how_title: 'Cómo funciona Global Dots',
+    how_p_html: 'Global Dots escribe significados con <b>celdas</b>. Cada celda es una pequeña cuadrícula con seis posiciones de puntos, y cada símbolo está formado por una o más celdas. Esta página explica las partes.',
+    step1_html: '<b>Levante puntos</b> en la celda grande de la página Traducir.',
+    step2_html: 'Pulse <b>Añadir celda</b>. Añada más celdas para completar un símbolo y luego un <b>Espacio</b> antes del siguiente.',
+    step3_html: 'Pulse <b>Traducir</b> para leerlo en su idioma.',
+    lesson1: 'Lección 1', lesson2: 'Lección 2', lesson3: 'Lección 3', lesson4: 'Lección 4',
+    l1_title: 'La celda',
+    l1_p_html: 'Las seis posiciones se numeran <b>1-2-3</b> de arriba abajo en la columna izquierda y <b>4-5-6</b> en la derecha. Una celda se nombra por sus puntos levantados, por ejemplo «puntos 1-2-4». Hay <b>63</b> celdas diferentes.',
+    show63: 'Mostrar las 63 celdas',
+    l2_title: 'Las celdas forman símbolos', l2_p: 'Un símbolo es una o más celdas escritas juntas, sin espacio entre ellas. Algunos símbolos usan una celda; otros, varias.',
+    l3_title: 'Los espacios separan los símbolos',
+    l3_p_html: 'Ponga un <b>espacio</b> (una celda vacía) entre los símbolos, igual que las palabras se separan con espacios. Los signos de puntuación se escriben igual: en su propia celda, con un espacio antes.',
+    l4_title: 'Números', l4_p_html: 'Empiece con el <b>signo de número</b> (puntos 3-4-5-6) y después una celda por cada dígito.',
+    cell_1: '1 celda', cell_n: '{n} celdas', dashed: 'Los recuadros punteados son espacios.'
+  },
+  pt: {
+    title_html: 'Localizador de símbolos Global <em>Dots</em>',
+    tagline: 'Levante os pontos, forme seus símbolos e leia-os no seu próprio idioma.',
+    tab_translate: 'Traduzir', tab_browse: 'Ver símbolos', tab_learn: 'Aprender',
+    build_cell: 'Forme uma cela', tap_dots: 'Toque nos pontos para levantá-los', dots: 'Pontos', dots_lc: 'pontos',
+    add_cell: 'Adicionar cela', word_space: 'Espaço', undo: 'Desfazer', clear_all: 'Limpar tudo',
+    hint_html: 'Teclado: <kbd>1</kbd>–<kbd>6</kbd> pontos · <kbd>Espaço</kbd> adicionar cela · <kbd>Backspace</kbd> desfazer · <kbd>Enter</kbd> traduzir',
+    your_symbols: 'Seus símbolos',
+    empty_html: 'Levante pontos na cela e toque em <b>Adicionar cela</b>. Seus símbolos aparecerão aqui.',
+    sel_hint: 'Toque nos símbolos para selecioná-los', n_selected: '{n} selecionados', select_all: 'Selecionar tudo',
+    repeat: 'Repetir', repeat_title: 'Adicionar uma cópia dos símbolos selecionados no final', delete: 'Excluir', deselect: 'Desmarcar',
+    translate_btn: 'Traduzir', need_cell: 'Primeiro forme pelo menos uma cela.',
+    cell_aria: 'Cela com os pontos {d}', selected_sfx: 'selecionada', tap_select: 'toque para selecionar',
+    th_cells: 'Celas', th_dots: 'Pontos', th_english: 'Inglês',
+    pill_number: 'número', number_n: 'número {n}', pill_unknown: 'não está no sistema', pill_found: 'encontrado',
+    pill_missing: 'sem tradução ainda', pill_meanings: '{n} significados', or: 'ou',
+    note_missing: '{n} destes símbolos ainda não têm tradução, por isso aparecem em inglês e em itálico.',
+    note_nodict: 'Ainda não há dicionário para este idioma, por isso os significados aparecem em inglês.',
+    note_unknown: '{n} destas celas não fazem parte de nenhum símbolo do sistema.',
+    several: 'Símbolos com vários significados', tap_meaning: 'Toque em um significado para usá-lo na frase.',
+    copy_tx: 'Copiar tradução', copied: 'Copiado',
+    search_label: 'Buscar por palavra, tradução ou números dos pontos', search_ph: 'amor, love, 123456',
+    show: 'Mostrar', f_all: 'Todos os símbolos', f_missing: 'Sem tradução', f_done: 'Traduzidos',
+    count: '{a} de {b} símbolos', no_tr: 'Sem tradução ainda', use_in_tx: 'Usar em Traduzir', no_match: 'Nenhum símbolo corresponde à busca.',
+    foot: '{s} símbolos · {l} idiomas', blank_dict: 'Dicionário em branco para um novo idioma', anon: 'As visitas são contadas de forma anônima, sem cookies',
+    load_err: 'Não foi possível carregar os símbolos. Tente novamente mais tarde.', file_err: 'Abra esta página pelo link do site para ver os símbolos.',
+    start_here: 'Comece aqui', how_title: 'Como funciona o Global Dots',
+    how_p_html: 'O Global Dots escreve significados com <b>celas</b>. Cada cela é uma pequena grade com seis posições de pontos, e cada símbolo é formado por uma ou mais celas. Esta página explica as partes.',
+    step1_html: '<b>Levante pontos</b> na cela grande da página Traduzir.',
+    step2_html: 'Toque em <b>Adicionar cela</b>. Adicione mais celas para completar um símbolo e depois um <b>Espaço</b> antes do próximo.',
+    step3_html: 'Toque em <b>Traduzir</b> para ler no seu idioma.',
+    lesson1: 'Lição 1', lesson2: 'Lição 2', lesson3: 'Lição 3', lesson4: 'Lição 4',
+    l1_title: 'A cela',
+    l1_p_html: 'As seis posições são numeradas <b>1-2-3</b> de cima para baixo na coluna da esquerda e <b>4-5-6</b> na da direita. Uma cela é identificada pelos pontos levantados, por exemplo “pontos 1-2-4”. Existem <b>63</b> celas diferentes.',
+    show63: 'Mostrar as 63 celas',
+    l2_title: 'As celas formam símbolos', l2_p: 'Um símbolo é uma ou mais celas escritas juntas, sem espaço entre elas. Alguns símbolos usam uma cela; outros, várias.',
+    l3_title: 'Os espaços separam os símbolos',
+    l3_p_html: 'Coloque um <b>espaço</b> (uma cela vazia) entre os símbolos, assim como as palavras são separadas por espaços. Os sinais de pontuação são escritos da mesma forma: em sua própria cela, com um espaço antes.',
+    l4_title: 'Números', l4_p_html: 'Comece com o <b>sinal de número</b> (pontos 3-4-5-6) e depois uma cela para cada dígito.',
+    cell_1: '1 cela', cell_n: '{n} celas', dashed: 'As caixas tracejadas são espaços.'
+  },
+  zh: {
+    title_html: 'Global <em>Dots</em> 符号查询',
+    tagline: '点亮圆点，组成符号，用你自己的语言阅读。',
+    tab_translate: '翻译', tab_browse: '浏览符号', tab_learn: '学习',
+    build_cell: '组成方格', tap_dots: '点按圆点使其凸起', dots: '点', dots_lc: '点',
+    add_cell: '添加方格', word_space: '词间空格', undo: '撤销', clear_all: '全部清除',
+    hint_html: '键盘：<kbd>1</kbd>–<kbd>6</kbd> 圆点 · <kbd>空格</kbd> 添加方格 · <kbd>退格</kbd> 撤销 · <kbd>回车</kbd> 翻译',
+    your_symbols: '你的符号',
+    empty_html: '在方格中点亮圆点，然后按<b>添加方格</b>。你的符号会显示在这里。',
+    sel_hint: '点按符号即可选择', n_selected: '已选择 {n} 个', select_all: '全选',
+    repeat: '重复', repeat_title: '在末尾添加所选符号的副本', delete: '删除', deselect: '取消选择',
+    translate_btn: '翻译', need_cell: '请先至少组成一个方格。',
+    cell_aria: '点 {d} 的方格', selected_sfx: '已选择', tap_select: '点按选择',
+    th_cells: '方格', th_dots: '点位', th_english: '英语',
+    pill_number: '数字', number_n: '数字 {n}', pill_unknown: '不在系统中', pill_found: '已找到',
+    pill_missing: '尚无翻译', pill_meanings: '{n} 个含义', or: '或',
+    note_missing: '其中 {n} 个符号尚无翻译，因此以英文斜体显示。',
+    note_nodict: '此语言还没有词典，因此含义以英文显示。',
+    note_unknown: '其中 {n} 个方格不属于系统中的任何符号。',
+    several: '有多个含义的符号', tap_meaning: '点按一个含义，将其用于句子。',
+    copy_tx: '复制译文', copied: '已复制',
+    search_label: '按单词、译文或点位编号搜索', search_ph: '爱, love, 123456',
+    show: '显示', f_all: '全部符号', f_missing: '缺少翻译', f_done: '已翻译',
+    count: '共 {b} 个符号，显示 {a} 个', no_tr: '尚无翻译', use_in_tx: '用于翻译', no_match: '没有符合搜索条件的符号。',
+    foot: '{s} 个符号 · {l} 种语言', blank_dict: '新语言的空白词典', anon: '访问以匿名方式统计，不使用 Cookie',
+    load_err: '无法加载符号，请稍后再试。', file_err: '请通过网站链接打开此页面以查看符号。',
+    start_here: '从这里开始', how_title: 'Global Dots 的原理',
+    how_p_html: 'Global Dots 用<b>方格</b>书写含义。每个方格是一个有六个点位的小格子，每个符号由一个或多个方格组成。本页介绍各个部分。',
+    step1_html: '在“翻译”页面的大方格中<b>点亮圆点</b>。',
+    step2_html: '按<b>添加方格</b>。继续添加方格以完成一个符号，然后在下一个符号前按<b>词间空格</b>。',
+    step3_html: '按<b>翻译</b>，用你的语言阅读。',
+    lesson1: '第 1 课', lesson2: '第 2 课', lesson3: '第 3 课', lesson4: '第 4 课',
+    l1_title: '方格',
+    l1_p_html: '六个点位在左列从上到下编号为 <b>1-2-3</b>，右列为 <b>4-5-6</b>。方格以凸起的点命名，例如“点 1-2-4”。共有 <b>63</b> 种不同的方格。',
+    show63: '显示全部 63 个方格',
+    l2_title: '方格组成符号', l2_p: '一个符号由一个或多个连写、中间不留空的方格组成。有的符号只用一个方格，有的用多个。',
+    l3_title: '空格分隔符号',
+    l3_p_html: '符号之间要加一个<b>词间空格</b>（一个空方格），就像用空格分隔单词一样。标点符号也一样：单独占一个方格，前面加一个空格。',
+    l4_title: '数字', l4_p_html: '先写<b>数字符号</b>（点 3-4-5-6），然后每个数字用一个方格。',
+    cell_1: '1 个方格', cell_n: '{n} 个方格', dashed: '虚线框表示词间空格。'
+  }
+};
+let ui = (() => { const saved = pref.get('ui', ''); if (STR[saved]) return saved; const nav = (navigator.language || 'en').toLowerCase(); return nav.startsWith('es') ? 'es' : nav.startsWith('pt') ? 'pt' : nav.startsWith('zh') ? 'zh' : 'en'; })();
+function t(key, vars) { let v = (STR[ui] && STR[ui][key]) ?? STR.en[key] ?? key; if (vars) for (const k in vars) v = v.split('{' + k + '}').join(vars[k]); return v; }
+const cellsWord = n => n === 1 ? t('cell_1') : t('cell_n', { n });
+// Which dictionary goes with each interface language (matched by name first, then by code).
+const DICT_MATCH = { es: [/spanish|español|espanol|castellano/i, ['S', 'ES', 'SP']], pt: [/portug/i, ['P', 'PT', 'BR']], zh: [/chinese|中文|汉语|漢語|chino|chin[eê]s/i, ['ZH', 'CH', 'C', 'CN', 'CHS', 'CHT']] };
+function dictCode() {
+  if (ui === 'en' || !DICT_MATCH[ui]) return 'E';
+  const [re, codes] = DICT_MATCH[ui];
+  const byName = languages.find(l => re.test(l.name)); if (byName) return byName.code;
+  const byCodeL = codes.map(c => languages.find(l => l.code === c)).find(Boolean); return byCodeL ? byCodeL.code : 'E';
+}
+function applyUI() {
+  document.documentElement.lang = ui === 'zh' ? 'zh-Hans' : ui;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+  document.querySelectorAll('.uil').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ui === ui)));
+}
 
 // ================= translate =================
 let input = [], cur = 0, mCells = '', mCur = 0, editingId = null;
@@ -688,7 +876,7 @@ function buildCell(host, get, set) {
 function paintCell(host, mask) { host.querySelectorAll('.dot').forEach(b => b.setAttribute('aria-pressed', String(!!(mask & (1 << (b.dataset.dot - 1)))))); }
 buildCell($('bigcell'), () => cur, m => { cur = m; renderCell(); });
 buildCell($('minicell'), () => mCur, m => { mCur = m; paintCell($('minicell'), mCur); });
-function renderCell() { paintCell($('bigcell'), cur); $('cellPreview').textContent = cur ? 'Dots ' + [...dotsOf(toChar(cur))].join(' · ') : 'Tap the dots to raise them'; }
+function renderCell() { paintCell($('bigcell'), cur); $('cellPreview').textContent = cur ? t('dots') + ' ' + [...dotsOf(toChar(cur))].join(' · ') : t('tap_dots'); }
 let selected = new Set(), anchor = null, choice = {}, liveTx = false, inTx = false;
 function addCell() { if (!cur) { addSpace(); return; } input.push(toChar(cur)); cur = 0; selected.clear(); renderCell(); renderInput(); }
 function addSpace() { if (input.length && input[input.length - 1] !== ' ') input.push(' '); selected.clear(); renderInput(); }
@@ -696,18 +884,18 @@ function renderInput() {
   choice = {};
   const w = $('inputwin'); w.classList.toggle('has', input.length > 0);
   $('selBar').hidden = !input.length;
-  if (!input.length) { selected.clear(); w.innerHTML = '<span class="empty">Raise dots in the cell, then press <b>Add cell</b>. Your symbols line up here.</span>'; renderSelBar(); return; }
+  if (!input.length) { selected.clear(); w.innerHTML = '<span class="empty">' + t('empty_html') + '</span>'; renderSelBar(); return; }
   w.innerHTML = input.map((c, i) => {
     const sel = selected.has(i);
-    return c === ' ' ? `<button class="chip sp${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="Word space${sel ? ', selected' : ''}" title="Word space · tap to select"></button>`
-      : `<button class="chip${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="Cell with dots ${dotsOf(c)}${sel ? ', selected' : ''}" title="Dots ${dotsOf(c)} · tap to select">${cellSVG(c, 54)}</button>`;
+    return c === ' ' ? `<button class="chip sp${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="${t('word_space')}${sel ? ', ' + t('selected_sfx') : ''}" title="${t('word_space')} · ${t('tap_select')}"></button>`
+      : `<button class="chip${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="${t('cell_aria', { d: dotsOf(c) })}${sel ? ', ' + t('selected_sfx') : ''}" title="${t('dots')} ${dotsOf(c)} · ${t('tap_select')}">${cellSVG(c, 54)}</button>`;
   }).join('');
   renderSelBar();
   if (liveTx && !inTx) translate();
 }
 function renderSelBar() {
   const n = selected.size;
-  $('selCount').textContent = n ? `${n} selected` : 'Tap symbols to select them';
+  $('selCount').textContent = n ? t('n_selected', { n }) : t('sel_hint');
   $('selCopy').disabled = $('selDel').disabled = $('selNone').disabled = !n;
   $('selAll').disabled = !input.length || n === input.length;
 }
@@ -732,7 +920,7 @@ $('backspace').onclick = () => { if (cur) { cur = 0; renderCell(); } else if (se
 $('clearAll').onclick = () => { liveTx = false; input = []; cur = 0; selected.clear(); anchor = null; renderCell(); renderInput(); $('result').innerHTML = ''; };
 $('translateBtn').onclick = translate;
 $('result').addEventListener('click', e => {
-  if (e.target.id === 'copyTx') { const t = $('sentenceText').cloneNode(true); t.querySelectorAll('.alts').forEach(x => x.remove()); const txt = t.textContent.trim(); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { e.target.textContent = 'Copied'; setTimeout(() => { if ($('copyTx')) $('copyTx').textContent = 'Copy translation'; }, 1500); }).catch(() => { const r = document.createRange(); r.selectNodeContents($('sentenceText')); getSelection().removeAllRanges(); getSelection().addRange(r); }); return; }
+  if (e.target.id === 'copyTx') { const node = $('sentenceText').cloneNode(true); node.querySelectorAll('.alts').forEach(x => x.remove()); const txt = node.textContent.trim(); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { e.target.textContent = t('copied'); setTimeout(() => { if ($('copyTx')) $('copyTx').textContent = t('copy_tx'); }, 1500); }).catch(() => { const r = document.createRange(); r.selectNodeContents($('sentenceText')); getSelection().removeAllRanges(); getSelection().addRange(r); }); return; }
   const b = e.target.closest('.mopt'); if (!b) return; choice[+b.dataset.seg] = +b.dataset.k; const keep = choice; translate(); choice = keep; });
 document.addEventListener('keydown', e => {
   if ($('view-translate').hidden) return;
@@ -751,39 +939,40 @@ function translate() {
 }
 function translateNow() {
   if (cur) addCell();
-  if (!liveTx) track('Translate', { language: langName($('langSel').value || 'E') });
+  if (!liveTx) track('Translate', { language: UI_LANGS[ui] });
   liveTx = true;
-  const lang = $('langSel').value || 'E', str = input.join('').trim(), out = $('result');
-  if (!str) { out.innerHTML = liveTx && input.length === 0 ? '' : '<p class="note">Build at least one cell first.</p>'; return; }
+  const lang = dictCode(), str = input.join('').trim(), out = $('result');
+  if (!str) { out.innerHTML = liveTx && input.length === 0 ? '' : `<p class="note">${t('need_cell')}</p>`; return; }
   let sentence = '', rows = '', missing = 0, unknown = 0, multi = '';
   const segs = segment(str);
   segs.forEach((s, si) => {
     let piece, cls = '', en, status;
-    if (s.number) { piece = s.number; en = 'number ' + s.number; status = '<span class="pill ok">number</span>'; }
-    else if (s.unknown) { piece = '?'; cls = 'unk'; unknown++; en = '—'; status = '<span class="pill bad">not in the system</span>'; }
+    if (s.number) { piece = s.number; en = t('number_n', { n: s.number }); status = `<span class="pill ok">${t('pill_number')}</span>`; }
+    else if (s.unknown) { piece = '?'; cls = 'unk'; unknown++; en = '—'; status = `<span class="pill bad">${t('pill_unknown')}</span>`; }
     else {
       const pick = Math.min(choice[si] || 0, s.syms.length - 1);
       const v = vern(s.syms[pick], lang); piece = v.text; if (!v.ok) { cls = 'miss'; missing++; }
       if (s.syms.length > 1) {
-        const opts = s.syms.map((x, k) => { const vx = vern(x, lang); return `<button class="mopt" data-seg="${si}" data-k="${k}" aria-pressed="${k === pick}">${esc(vx.text)}</button>`; }).join('<span class="or">or</span>');
+        const opts = s.syms.map((x, k) => { const vx = vern(x, lang); return `<button class="mopt" data-seg="${si}" data-k="${k}" aria-pressed="${k === pick}">${esc(vx.text)}</button>`; }).join(`<span class="or">${t('or')}</span>`);
         multi += `<li>${cellsSVG(s.code, 30)}${opts}</li>`;
       }
-      en = s.syms.map(x => esc(x.english)).join(' <span style="color:var(--muted)">or</span> ');
-      status = v.ok ? '<span class="pill ok">found</span>' : `<span class="pill warn">no ${esc(langName(lang))} yet</span>`;
-      if (s.syms.length > 1) status += ' <span class="pill warn">' + s.syms.length + ' meanings</span>';
+      en = s.syms.map(x => esc(x.english)).join(` <span style="color:var(--muted)">${t('or')}</span> `);
+      status = v.ok ? `<span class="pill ok">${t('pill_found')}</span>` : `<span class="pill warn">${t('pill_missing')}</span>`;
+      if (s.syms.length > 1) status += ` <span class="pill warn">${t('pill_meanings', { n: s.syms.length })}</span>`;
     }
     const isP = s.syms && s.syms[0].category === 'punctuation';
     let shown = cls ? `<span class="${cls}">${esc(piece)}</span>` : esc(piece);
     if (s.syms && s.syms.length > 1) { const pick = Math.min(choice[si] || 0, s.syms.length - 1); shown += `<span class="alts"> (${s.syms.filter((_, k) => k !== pick).map(x => esc(vern(x, lang).text)).join(' / ')})</span>`; }
-    sentence += (sentence && !isP ? ' ' : '') + shown;
+    sentence += (sentence && !isP && ui !== 'zh' ? ' ' : '') + shown;
     const vtext = s.syms ? s.syms.map(x => { const v = vern(x, lang); return v.ok ? esc(v.text) : `<i style="color:var(--warn)">${esc(x.english)}</i>`; }).join(' / ') : esc(piece);
     rows += `<tr><td>${cellsSVG(s.code, 36)}</td><td class="dots">${esc(dotsStr(s.code))}</td><td>${en}</td><td><b>${vtext}</b></td><td>${status}</td></tr>`;
   });
   let notes = '';
-  if (missing) notes += `<p class="note warn">${missing} symbol${missing > 1 ? 's have' : ' has'} no ${esc(langName(lang))} translation yet, so ${missing > 1 ? 'they are' : 'it is'} shown in English, in italics.</p>`;
-  if (unknown) notes += `<p class="note bad">${unknown} cell${unknown > 1 ? 's are' : ' is'} not part of any symbol in the system.</p>`;
-  out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(langName(lang))}</span><p class="sentence" id="sentenceText">${sentence}</p>${multi ? `<div class="meanings"><p class="eyebrow">Symbols with several meanings</p><ul>${multi}</ul><p class="mhint">Tap a meaning to use it in the sentence.</p></div>` : ''}<button class="btn small copybtn" id="copyTx">Copy translation</button></div>${notes ? `<div class="notes">${notes}</div>` : ''}
-    <div class="tablewrap"><table><thead><tr><th>Cells</th><th>Dots</th><th>English</th><th>${esc(langName(lang))}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  if (ui !== 'en' && lang === 'E') notes += `<p class="note warn">${t('note_nodict')}</p>`;
+  else if (missing) notes += `<p class="note warn">${t('note_missing', { n: missing })}</p>`;
+  if (unknown) notes += `<p class="note bad">${t('note_unknown', { n: unknown })}</p>`;
+  out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(UI_LANGS[ui])}</span><p class="sentence" id="sentenceText">${sentence}</p>${multi ? `<div class="meanings"><p class="eyebrow">${t('several')}</p><ul>${multi}</ul><p class="mhint">${t('tap_meaning')}</p></div>` : ''}<button class="btn small copybtn" id="copyTx">${t('copy_tx')}</button></div>${notes ? `<div class="notes">${notes}</div>` : ''}
+    <div class="tablewrap"><table><thead><tr><th>${t('th_cells')}</th><th>${t('th_dots')}</th><th>${t('th_english')}</th><th>${esc(UI_LANGS[ui])}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 // ================= selects & browse =================
@@ -792,12 +981,18 @@ function renderLangSelects() {
   for (const id of ['langSel', 'langSel2']) {
     const sel = $(id), keep = sel.value || pref.get(id, 'E');
     sel.innerHTML = opts.map(l => `<option value="${esc(l.code)}">${esc(l.name)}</option>`).join('');
-    sel.value = opts.some(o => o.code === keep) ? keep : 'E';
+    sel.value = dictCode();
   }
 }
-['langSel', 'langSel2'].forEach(id => $(id).addEventListener('change', e => { pref.set(id, e.target.value); track('Choose language', { language: langName(e.target.value) }); if (id === 'langSel2') renderBrowse(); else { if ($('result').innerHTML) translate(); learnDone = false; if (!$('view-learn').hidden) renderLearn(); } }));
+document.querySelectorAll('.uil').forEach(b => b.onclick = () => {
+  if (b.dataset.ui === ui) return;
+  ui = b.dataset.ui; pref.set('ui', ui); track('Choose language', { language: UI_LANGS[ui] });
+  applyUI(); renderLangSelects(); renderCell(); renderSelBar(); renderBrowse(); renderFoot();
+  learnDone = false; if (!$('view-learn').hidden) renderLearn();
+  if (liveTx) translate(); else renderInput();
+});
 function renderBrowse() {
-  const q = $('q').value.trim().toLowerCase(), lang = $('langSel2').value || 'E', f = $('filt').value;
+  const q = $('q').value.trim().toLowerCase(), lang = dictCode(), f = $('filt').value;
   const qDots = /^[1-6 ]+$/.test(q) ? q.split(/\s+/).filter(Boolean) : null;
   let list = [...symbols].sort((a, b) => (a.category === 'punctuation') - (b.category === 'punctuation') || a.english.localeCompare(b.english));
   list = list.filter(s => {
@@ -806,15 +1001,15 @@ function renderBrowse() {
     if (qDots) { const ds = [...s.code].map(dotsOf); return qDots.every(d => ds.includes(d)); }
     return [s.english, ...Object.values(s.tr)].join(' | ').toLowerCase().includes(q);
   });
-  $('count').textContent = `${list.length} of ${symbols.length} symbols`;
+  $('count').textContent = t('count', { a: list.length, b: symbols.length });
   $('grid').innerHTML = list.map(s => {
     const v = vern(s, lang);
     return `<article class="sym"><div class="art">${cellsSVG(s.code, 44)}</div><div class="body">
       <div class="en">${esc(s.english)}</div>
-      ${lang !== 'E' && s.category !== 'punctuation' ? `<div class="vn ${v.ok ? '' : 'miss'}">${v.ok ? esc(v.text) : 'No ' + esc(langName(lang)) + ' translation yet'}</div>` : ''}
-      <div class="dn">Dots ${esc(dotsStr(s.code))}</div>
-      <div class="acts"><button class="btn small" data-use="${esc(s.id)}">Use in Translate</button>${canEdit ? `<button class="btn small ghost" data-edit="${esc(s.id)}">Edit</button>` : ''}</div></div></article>`;
-  }).join('') || '<p class="count">No symbols match that search.</p>';
+      ${lang !== 'E' && s.category !== 'punctuation' ? `<div class="vn ${v.ok ? '' : 'miss'}">${v.ok ? esc(v.text) : t('no_tr')}</div>` : ''}
+      <div class="dn">${t('dots')} ${esc(dotsStr(s.code))}</div>
+      <div class="acts"><button class="btn small" data-use="${esc(s.id)}">${t('use_in_tx')}</button>${canEdit ? `<button class="btn small ghost" data-edit="${esc(s.id)}">Edit</button>` : ''}</div></div></article>`;
+  }).join('') || `<p class="count">${t('no_match')}</p>`;
 }
 $('q').addEventListener('input', renderBrowse); $('filt').addEventListener('change', renderBrowse);
 $('grid').addEventListener('click', e => {
@@ -1011,23 +1206,23 @@ $('langList').addEventListener('click', async e => {
 let learnDone = false;
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const wordSyms = () => symbols.filter(s => s.category !== 'punctuation');
+const meaning = s => s.category === 'punctuation' ? s.english : vern(s, dictCode()).text;
 function exampleRow(s, size = 34) {
-  const n = s.code.length;
-  return `<div class="ex">${cellsSVG(s.code, size)}<div class="exm"><b>${esc(s.english)}</b><span>${n} cell${n > 1 ? 's' : ''} · dots ${esc(dotsStr(s.code))}</span></div></div>`;
+  return `<div class="ex">${cellsSVG(s.code, size)}<div class="exm"><b>${esc(meaning(s))}</b><span>${cellsWord(s.code.length)} · ${t('dots_lc')} ${esc(dotsStr(s.code))}</span></div></div>`;
 }
 // A row of symbols with word spaces between them, plus the English reading.
 const CLOSERS = [',', '.', '?', '!', ':', ';', '”'];
 function englishText(items) {
-  let t = '';
+  let out = '';
   items.forEach((s, i) => {
     const prev = items[i - 1];
-    const glue = !t || CLOSERS.includes(s.english) || (prev && prev.english === '“');
-    t += (glue ? '' : ' ') + (s.label || s.english);
+    const glue = !out || ui === 'zh' || CLOSERS.includes(s.english) || (prev && prev.english === '“');
+    out += (glue ? '' : ' ') + meaning(s);
   });
-  return t.charAt(0).toUpperCase() + t.slice(1);
+  return out.charAt(0).toUpperCase() + out.slice(1);
 }
 function sequence(items, note) {
-  return `<div class="sentence-ex">${items.map((s, i) => `${i ? '<span class="gap" title="Word space"></span>' : ''}<span class="w${s.mark ? ' mark' : ''}">${cellsSVG(s.code, 34)}<small>${esc(s.label || s.english)}</small></span>`).join('')}</div>
+  return `<div class="sentence-ex">${items.map((s, i) => `${i ? `<span class="gap" title="${t('word_space')}"></span>` : ''}<span class="w${s.mark ? ' mark' : ''}">${cellsSVG(s.code, 34)}<small>${esc(meaning(s))}</small></span>`).join('')}</div>
     <p class="exread"><b>${esc(englishText(items))}</b>${note ? ` <span>${note}</span>` : ''}</p>`;
 }
 function renderLearn() {
@@ -1035,9 +1230,9 @@ function renderLearn() {
   learnDone = true;
   // all 63 cells, ordered by number of dots, then by dot numbers
   const masks = [...Array(63)].map((_, i) => i + 1).sort((a, b) => dotsOf(toChar(a)).length - dotsOf(toChar(b)).length || dotsOf(toChar(a)).localeCompare(dotsOf(toChar(b))));
-  $('cellChart').innerHTML = masks.map(m => `<div class="cc" title="Dots ${dotsOf(toChar(m))}">${cellSVG(toChar(m), 30)}<span>${dotsOf(toChar(m))}</span></div>`).join('');
+  $('cellChart').innerHTML = masks.map(m => `<div class="cc" title="${t('dots')} ${dotsOf(toChar(m))}">${cellSVG(toChar(m), 30)}<span>${dotsOf(toChar(m))}</span></div>`).join('');
   // examples of short and long symbols
-  const words = wordSyms(), lang = $('langSel').value || 'E';
+  const words = wordSyms(), lang = dictCode();
   const prefer = list => list.sort((a, b) => (!!b.tr[lang]) - (!!a.tr[lang]) || a.english.localeCompare(b.english));
   const picks = [];
   const one = prefer(words.filter(s => s.code.length === 1))[0], two = prefer(words.filter(s => s.code.length === 2))[0];
@@ -1050,41 +1245,11 @@ function renderLearn() {
   const pickWords = (want, n) => { const got = want.map(byWord).filter(Boolean); return got.length >= n ? got.slice(0, n) : got.concat(words.filter(s => !got.includes(s)).slice(0, n - got.length)); };
   const stop = punct('.');
   const parts = pickWords(['JEHOVAH', 'LOVE', 'PEOPLE'], 3);
-  $('exSentence').innerHTML = sequence(stop ? [...parts, stop] : parts, 'The dashed boxes are word spaces.');
+  $('exSentence').innerHTML = sequence(stop ? [...parts, stop] : parts, t('dashed'));
   // numbers
-  $('exDigits').innerHTML = `<div class="digit">${cellSVG('#', 34)}<b>#</b><small>dots 3456</small></div>` +
+  $('exDigits').innerHTML = `<div class="digit">${cellSVG('#', 34)}<b>#</b><small>${t('dots_lc')} 3456</small></div>` +
     '1234567890'.split('').map(d => { const L = 'JABCDEFGHI'[+d]; return `<div class="digit">${cellsSVG('#' + L, 30)}<b>${d}</b></div>`; }).join('');
-  // punctuation and several meanings
-  const marks = symbols.filter(s => s.category === 'punctuation');
-  const examplesFor = {
-    ',': () => [...pickWords(['ADAM'], 1), punct(','), ...pickWords(['EVE'], 1)],
-    '.': () => [...pickWords(['JESUS', 'TEACH'], 2), punct('.')],
-    '?': () => [...pickWords(['WHO', 'YOU'], 2), punct('?')],
-    '“': () => [punct('“'), ...pickWords(['TRUE'], 1), punct('”')],
-    '”': () => [...pickWords(['BIBLE', 'SAY'], 2), punct('“'), ...pickWords(['LOVE'], 1), punct('”')],
-  };
-  const NAMES = { ',': 'Comma', '.': 'Full stop', '?': 'Question mark', '“': 'Opening quotation mark', '”': 'Closing quotation mark' };
-  $('exPunct').innerHTML = marks.map(m => {
-    const ex = (examplesFor[m.english] ? examplesFor[m.english]() : [...pickWords(['LOVE'], 1), m]).filter(Boolean).map(x => x === m ? { ...x, mark: true } : x);
-    return `<div class="pmark"><div class="ex">${cellsSVG(m.code, 30)}<div class="exm"><b>${esc(NAMES[m.english] || m.english)} &nbsp;${esc(m.english)}</b><span>1 cell · dots ${esc(dotsStr(m.code))}</span></div></div>${sequence(ex)}</div>`;
-  }).join('') || '<p class="small">No punctuation symbols yet.</p>';
-  // several meanings: show the same cell used each way
-  const multi = [...byCode.entries()].filter(([, l]) => l.length > 1);
-  $('multiIntro').hidden = !multi.length;
-  $('exMulti').innerHTML = multi.map(([c, l]) => {
-    const word = l.find(s => s.category !== 'punctuation'), mark = l.find(s => s.category === 'punctuation');
-    let body = '';
-    if (word && mark) {
-      const mid = [...pickWords(['GROUP', 'WRITE'], 2), { ...word, mark: true }, ...pickWords(['NO'], 1)];
-      if (punct('.')) mid.push(punct('.'));
-      const end = [...pickWords(['WHO', 'YOU'], 2), { ...mark, mark: true }];
-      body = `<p class="small"><b>Used as a word</b>, it means “${esc(word.english)}”:</p>${sequence(mid)}
-        <p class="small" style="margin-top:12px"><b>Used as punctuation</b>, it is the ${esc((NAMES[mark.english] || mark.english).toLowerCase())} “${esc(mark.english)}”:</p>${sequence(end)}`;
-    }
-    return `<div class="pmark"><div class="ex">${cellsSVG(c, 30)}<div class="exm"><b>${l.map(s => esc(s.english)).join(' <span style="display:inline;color:var(--muted)">or</span> ')}</b><span>dots ${esc(dotsStr(c))}</span></div></div>${body}</div>`;
-  }).join('');
 }
-
 
 // ================= views =================
 function show(v) {
@@ -1094,21 +1259,24 @@ function show(v) {
   pref.set('view', v); if (v === 'browse') renderBrowse(); if (v === 'learn') renderLearn(); track('Open ' + v);
 }
 document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => show(b.dataset.view));
+function renderFoot() {
+  $('foot').innerHTML = `${t('foot', { s: symbols.length, l: languages.length + 1 })} · <a href="dictionary-template.txt" download style="color:inherit">${t('blank_dict')}</a>` + (window.GD_ANALYTICS ? ' · ' + t('anon') : '');
+}
 function renderAll() {
   reindex(); renderLangSelects(); renderLangList(); renderBrowse(); learnDone = false; if (!$('view-learn').hidden) renderLearn();
   const shown = [...$('trlist').querySelectorAll('input[data-lang]')].map(i => i.dataset.lang).sort().join();
   if (shown !== languages.map(l => l.code).sort().join()) renderTrList(symbols.find(s => s.id === editingId));
-  $('foot').innerHTML = `${symbols.length} symbols · ${languages.length + 1} languages · <a href="dictionary-template.txt" download style="color:inherit">Blank dictionary for a new language</a>` + (window.GD_ANALYTICS ? ' · Visits are counted anonymously, without cookies' : '');
+  renderFoot();
 }
 
 // ================= start =================
-renderCell(); renderInput(); renderCodeview(); renderTrList(null);
+applyUI(); renderCell(); renderInput(); renderCodeview(); renderTrList(null);
 if (gh.load()) canEdit = true;
 renderOwner();
 show(location.hash === '#manage' ? 'manage' : pref.get('view', 'translate'));
 loadAll().then(() => { if (canEdit) setStatus(''); }).catch(err => {
   if (canEdit) { canEdit = false; renderOwner(); setStatus('Could not reach GitHub with the saved access key: ' + err.message + ' Sign in again on the Owner page.', 'err'); loadAll().catch(e => setStatus(e.message, 'err')); }
-  else setStatus(location.protocol === 'file:' ? 'Open this page from its website link. Opened as a file, the browser blocks reading data.json.' : err.message, 'err');
+  else setStatus(location.protocol === 'file:' ? t('file_err') : t('load_err'), 'err');
 });
 })();
 </script>

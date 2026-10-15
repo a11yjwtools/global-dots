@@ -65,7 +65,7 @@ Your Umami dashboard then shows:
 - each visitor's country, device and browser language
 - these events:
   - **Translate**: which language people translate into
-  - **Choose language**: when someone picks a language
+  - **Choose language**: when someone switches the site language (English, Español, Português, 中文)
   - **Open browse / Open learn**: which parts of the site people use
 
 To switch statistics off, empty the id again.
