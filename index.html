@@ -208,6 +208,12 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
 .sentence-ex .w{display:flex;flex-direction:column;align-items:center;gap:6px}
 .sentence-ex .w small{font-family:var(--display);font-weight:600;font-size:.85rem}
 .sentence-ex .gap{width:22px;height:46px;border:1px dashed var(--line);border-radius:8px}
+.sentence-ex .w.mark svg circle.on{fill:var(--royal)}
+.sentence-ex .w.mark small{color:var(--royal)}
+.exread{margin:8px 0 0 !important;font-size:.95rem}
+.exread span{color:var(--muted);font-size:.85rem}
+.pmark{display:flex;flex-direction:column;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.pmark:last-child{border-bottom:0;padding-bottom:0}
 .digits{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px}
 .digit{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:12px;background:var(--tint)}
 .digit b{font-family:var(--display);font-size:1.2rem}
@@ -354,7 +360,7 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
     <div class="card lesson">
       <p class="eyebrow">Lesson 3</p>
       <h2>Spaces separate symbols</h2>
-      <p>Put a <b>word space</b> (an empty cell) between symbols, just as words are separated by spaces. Punctuation joins the symbol before it.</p>
+      <p>Put a <b>word space</b> (an empty cell) between symbols, just as words are separated by spaces. Punctuation marks are written the same way: as their own cell, with a space before them.</p>
       <div id="exSentence"></div>
     </div>
 
@@ -368,9 +374,9 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
     <div class="card lesson">
       <p class="eyebrow">Lesson 5</p>
       <h2>Punctuation and several meanings</h2>
-      <p>These cells mark punctuation:</p>
+      <p>Each punctuation mark is one cell, separated from the symbols around it by a space. An example of each:</p>
       <div class="examples small" id="exPunct"></div>
-      <p id="multiIntro">Some cell patterns have more than one meaning. The Translate page shows every meaning so you can choose the one that fits:</p>
+      <p id="multiIntro" style="margin-top:16px">Some cells have more than one meaning. The rest of the sentence shows which one is meant, and the Translate page shows every meaning so you can choose the one that fits. For example:</p>
       <div class="examples small" id="exMulti"></div>
     </div>
 
@@ -1006,9 +1012,23 @@ let learnDone = false;
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const wordSyms = () => symbols.filter(s => s.category !== 'punctuation');
 function exampleRow(s, size = 34) {
-  const lang = $('langSel').value || 'E', v = vern(s, lang);
   const n = s.code.length;
-  return `<div class="ex">${cellsSVG(s.code, size)}<div class="exm"><b>${esc(s.english)}</b>${lang !== 'E' && s.category !== 'punctuation' ? ` <span>${v.ok ? esc(langName(lang)) + ': ' + esc(v.text) : 'No ' + esc(langName(lang)) + ' translation yet'}</span>` : ''}<span>${n} cell${n > 1 ? 's' : ''} · dots ${esc(dotsStr(s.code))}</span></div></div>`;
+  return `<div class="ex">${cellsSVG(s.code, size)}<div class="exm"><b>${esc(s.english)}</b><span>${n} cell${n > 1 ? 's' : ''} · dots ${esc(dotsStr(s.code))}</span></div></div>`;
+}
+// A row of symbols with word spaces between them, plus the English reading.
+const CLOSERS = [',', '.', '?', '!', ':', ';', '”'];
+function englishText(items) {
+  let t = '';
+  items.forEach((s, i) => {
+    const prev = items[i - 1];
+    const glue = !t || CLOSERS.includes(s.english) || (prev && prev.english === '“');
+    t += (glue ? '' : ' ') + (s.label || s.english);
+  });
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+function sequence(items, note) {
+  return `<div class="sentence-ex">${items.map((s, i) => `${i ? '<span class="gap" title="Word space"></span>' : ''}<span class="w${s.mark ? ' mark' : ''}">${cellsSVG(s.code, 34)}<small>${esc(s.label || s.english)}</small></span>`).join('')}</div>
+    <p class="exread"><b>${esc(englishText(items))}</b>${note ? ` <span>${note}</span>` : ''}</p>`;
 }
 function renderLearn() {
   if (learnDone || !symbols.length) return;
@@ -1024,23 +1044,45 @@ function renderLearn() {
   const long = prefer(words.filter(s => s.code.length >= 4)).sort((a, b) => (!!b.tr[lang]) - (!!a.tr[lang]))[0];
   [one, two, long].forEach(s => { if (s && !picks.includes(s)) picks.push(s); });
   $('exSymbols').innerHTML = picks.map(s => exampleRow(s)).join('');
-  // a short sentence
-  const byWord = w => symbols.find(s => s.word === w);
-  let parts = ['JEHOVAH', 'LOVE', 'PEOPLE'].map(byWord).filter(Boolean);
-  if (parts.length < 3) parts = prefer(words.filter(s => s.code.length <= 2)).slice(0, 3);
-  const stop = symbols.find(s => s.category === 'punctuation' && s.english === '.');
-  const code = parts.map(s => s.code).join(' ') + (stop ? stop.code : '');
-  const tx = parts.map(s => vern(s, lang).text).join(' ') + (stop ? '.' : '');
-  $('exSentence').innerHTML = `<div class="sentence-ex">${parts.map((s, i) => `${i ? '<span class="gap" title="Word space"></span>' : ''}<span class="w">${cellsSVG(s.code + (stop && i === parts.length - 1 ? stop.code : ''), 34)}<small>${esc(s.english)}${stop && i === parts.length - 1 ? ' .' : ''}</small></span>`).join('')}</div>
-    <div class="ex" style="margin-top:10px"><div class="exm"><b>${esc(tx)}</b><span>${esc(langName(lang))} · the dashed boxes are word spaces</span></div></div>`;
+  // a short sentence (English)
+  const byWord = w => symbols.find(s => s.word === w && s.category !== 'punctuation');
+  const punct = e => symbols.find(s => s.category === 'punctuation' && s.english === e);
+  const pickWords = (want, n) => { const got = want.map(byWord).filter(Boolean); return got.length >= n ? got.slice(0, n) : got.concat(words.filter(s => !got.includes(s)).slice(0, n - got.length)); };
+  const stop = punct('.');
+  const parts = pickWords(['JEHOVAH', 'LOVE', 'PEOPLE'], 3);
+  $('exSentence').innerHTML = sequence(stop ? [...parts, stop] : parts, 'The dashed boxes are word spaces.');
   // numbers
   $('exDigits').innerHTML = `<div class="digit">${cellSVG('#', 34)}<b>#</b><small>dots 3456</small></div>` +
     '1234567890'.split('').map(d => { const L = 'JABCDEFGHI'[+d]; return `<div class="digit">${cellsSVG('#' + L, 30)}<b>${d}</b></div>`; }).join('');
   // punctuation and several meanings
-  $('exPunct').innerHTML = symbols.filter(s => s.category === 'punctuation').map(s => exampleRow(s, 30)).join('') || '<p class="small">No punctuation symbols yet.</p>';
+  const marks = symbols.filter(s => s.category === 'punctuation');
+  const examplesFor = {
+    ',': () => [...pickWords(['ADAM'], 1), punct(','), ...pickWords(['EVE'], 1)],
+    '.': () => [...pickWords(['JESUS', 'TEACH'], 2), punct('.')],
+    '?': () => [...pickWords(['WHO', 'YOU'], 2), punct('?')],
+    '“': () => [punct('“'), ...pickWords(['TRUE'], 1), punct('”')],
+    '”': () => [...pickWords(['BIBLE', 'SAY'], 2), punct('“'), ...pickWords(['LOVE'], 1), punct('”')],
+  };
+  const NAMES = { ',': 'Comma', '.': 'Full stop', '?': 'Question mark', '“': 'Opening quotation mark', '”': 'Closing quotation mark' };
+  $('exPunct').innerHTML = marks.map(m => {
+    const ex = (examplesFor[m.english] ? examplesFor[m.english]() : [...pickWords(['LOVE'], 1), m]).filter(Boolean).map(x => x === m ? { ...x, mark: true } : x);
+    return `<div class="pmark"><div class="ex">${cellsSVG(m.code, 30)}<div class="exm"><b>${esc(NAMES[m.english] || m.english)} &nbsp;${esc(m.english)}</b><span>1 cell · dots ${esc(dotsStr(m.code))}</span></div></div>${sequence(ex)}</div>`;
+  }).join('') || '<p class="small">No punctuation symbols yet.</p>';
+  // several meanings: show the same cell used each way
   const multi = [...byCode.entries()].filter(([, l]) => l.length > 1);
   $('multiIntro').hidden = !multi.length;
-  $('exMulti').innerHTML = multi.map(([c, l]) => `<div class="ex">${cellsSVG(c, 30)}<div class="exm"><b>${l.map(s => esc(vern(s, lang).text)).join(' <span style="display:inline;color:var(--muted)">or</span> ')}</b><span>dots ${esc(dotsStr(c))}</span></div></div>`).join('');
+  $('exMulti').innerHTML = multi.map(([c, l]) => {
+    const word = l.find(s => s.category !== 'punctuation'), mark = l.find(s => s.category === 'punctuation');
+    let body = '';
+    if (word && mark) {
+      const mid = [...pickWords(['GROUP', 'WRITE'], 2), { ...word, mark: true }, ...pickWords(['NO'], 1)];
+      if (punct('.')) mid.push(punct('.'));
+      const end = [...pickWords(['WHO', 'YOU'], 2), { ...mark, mark: true }];
+      body = `<p class="small"><b>Used as a word</b>, it means “${esc(word.english)}”:</p>${sequence(mid)}
+        <p class="small" style="margin-top:12px"><b>Used as punctuation</b>, it is the ${esc((NAMES[mark.english] || mark.english).toLowerCase())} “${esc(mark.english)}”:</p>${sequence(end)}`;
+    }
+    return `<div class="pmark"><div class="ex">${cellsSVG(c, 30)}<div class="exm"><b>${l.map(s => esc(s.english)).join(' <span style="display:inline;color:var(--muted)">or</span> ')}</b><span>dots ${esc(dotsStr(c))}</span></div></div>${body}</div>`;
+  }).join('');
 }
 
 
