@@ -144,13 +144,18 @@ td.dots{font-size:.92rem;color:var(--muted);white-space:nowrap}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
 .sym{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
 .sym:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-.sym .art{background:var(--tint);padding:18px 16px;min-height:84px;display:flex;align-items:center;justify-content:center}
+.sym .art{background:var(--tint);padding:18px 14px;min-height:84px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.sym .art svg.line{display:block;max-width:100%;height:auto}
+#grid{grid-auto-flow:dense}
+.sym.wide{grid-column:span 2}
+@media (max-width:600px){.sym.wide{grid-column:auto}}
+.sym .mean{display:flex;flex-direction:column;gap:2px}
+.sym .mor{font-size:.8rem;color:var(--muted);margin:2px 0}
 .sym .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
 .sym .en{font-family:var(--display);font-weight:600;font-size:1.1rem}
 .sym .vn{color:var(--royal);font-weight:700}
 .sym .vn.miss{color:var(--muted);font-weight:400;font-style:italic;font-size:.88rem}
-.sym .dn{font-size:.78rem;color:var(--muted)}
-.sym .acts{display:flex;gap:6px;margin-top:auto;padding-top:10px}
+.sym .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:10px}
 
 /* manage */
 .mg{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
@@ -490,6 +495,16 @@ function cellSVG(ch, size = 22) {
   let c = '';
   for (let i = 0; i < 6; i++) { const x = xs[i < 3 ? 0 : 1], y = ys[i % 3]; c += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" class="${m >= 0 && (m & (1 << i)) ? 'on' : 'off'}"/>`; }
   return `<svg class="cg" width="${w.toFixed(0)}" height="${h}" viewBox="0 0 ${w.toFixed(1)} ${h}" aria-hidden="true">${c}</svg>`;
+}
+// All cells of a symbol drawn as ONE picture, so it never breaks onto two lines; it shrinks to fit narrow cards.
+function cellsLineSVG(code, size) {
+  const w = size * 0.86, gap = size * 0.34, r = size * 0.12, h = size, n = code.length, W = n * w + (n - 1) * gap;
+  let c = '';
+  [...code].forEach((ch, k) => {
+    const m = toMask(ch), x0 = k * (w + gap), xs = [x0 + w * 0.26, x0 + w * 0.74], ys = [h * 0.14, h * 0.5, h * 0.86];
+    for (let i = 0; i < 6; i++) c += `<circle cx="${xs[i < 3 ? 0 : 1].toFixed(1)}" cy="${ys[i % 3].toFixed(1)}" r="${r.toFixed(1)}" class="${m >= 0 && (m & (1 << i)) ? 'on' : 'off'}"/>`;
+  });
+  return `<svg class="cg line" width="${W.toFixed(0)}" height="${h}" viewBox="0 0 ${W.toFixed(1)} ${h}" aria-hidden="true">${c}</svg>`;
 }
 const cellsSVG = (s, size) => `<span class="cells">${[...s].map(ch => cellSVG(ch, size)).join('')}</span>`;
 
@@ -994,27 +1009,35 @@ document.querySelectorAll('.uil').forEach(b => b.onclick = () => {
 function renderBrowse() {
   const q = $('q').value.trim().toLowerCase(), lang = dictCode(), f = $('filt').value;
   const qDots = /^[1-6 ]+$/.test(q) ? q.split(/\s+/).filter(Boolean) : null;
-  let list = [...symbols].sort((a, b) => (a.category === 'punctuation') - (b.category === 'punctuation') || a.english.localeCompare(b.english));
-  list = list.filter(s => {
-    if (f !== 'all' && lang !== 'E' && s.category !== 'punctuation') { const has = !!s.tr[lang]; if (f === 'missing' && has) return false; if (f === 'done' && !has) return false; }
+  // one card per cell pattern; a pattern with several meanings shows them all
+  const all = [...byCode.entries()].map(([code, syms]) => ({ code, syms }))
+    .sort((a, b) => (a.syms.every(s => s.category === 'punctuation')) - (b.syms.every(s => s.category === 'punctuation')) || a.syms[0].english.localeCompare(b.syms[0].english));
+  const words = g => g.syms.filter(s => s.category !== 'punctuation');
+  const list = all.filter(g => {
+    if (f !== 'all' && lang !== 'E') {
+      const w = words(g); if (!w.length) return false;
+      if (f === 'missing' && w.every(s => s.tr[lang])) return false;
+      if (f === 'done' && !w.every(s => s.tr[lang])) return false;
+    }
     if (!q) return true;
-    if (qDots) { const ds = [...s.code].map(dotsOf); return qDots.every(d => ds.includes(d)); }
-    return [s.english, ...Object.values(s.tr)].join(' | ').toLowerCase().includes(q);
+    if (qDots) { const ds = [...g.code].map(dotsOf); return qDots.every(d => ds.includes(d)); }
+    return g.syms.some(s => [s.english, ...Object.values(s.tr)].join(' | ').toLowerCase().includes(q));
   });
-  $('count').textContent = t('count', { a: list.length, b: symbols.length });
-  $('grid').innerHTML = list.map(s => {
-    const v = vern(s, lang);
-    return `<article class="sym"><div class="art">${cellsSVG(s.code, 44)}</div><div class="body">
-      <div class="en">${esc(s.english)}</div>
-      ${lang !== 'E' && s.category !== 'punctuation' ? `<div class="vn ${v.ok ? '' : 'miss'}">${v.ok ? esc(v.text) : t('no_tr')}</div>` : ''}
-      <div class="dn">${t('dots')} ${esc(dotsStr(s.code))}</div>
-      <div class="acts"><button class="btn small" data-use="${esc(s.id)}">${t('use_in_tx')}</button>${canEdit ? `<button class="btn small ghost" data-edit="${esc(s.id)}">Edit</button>` : ''}</div></div></article>`;
+  $('count').textContent = t('count', { a: list.length, b: all.length });
+  $('grid').innerHTML = list.map(g => {
+    const meanings = g.syms.map(s => {
+      const v = vern(s, lang);
+      return `<div class="mean"><div class="en">${esc(s.english)}</div>${lang !== 'E' && s.category !== 'punctuation' ? `<div class="vn ${v.ok ? '' : 'miss'}">${v.ok ? esc(v.text) : t('no_tr')}</div>` : ''}</div>`;
+    }).join(`<div class="mor">${t('or')}</div>`);
+    const edits = canEdit ? g.syms.map(s => `<button class="btn small ghost" data-edit="${esc(s.id)}">Edit${g.syms.length > 1 ? ': ' + esc(s.english) : ''}</button>`).join('') : '';
+    return `<article class="sym${g.code.length > 6 ? ' wide' : ''}"><div class="art">${cellsLineSVG(g.code, 44)}</div><div class="body">${meanings}
+      <div class="acts"><button class="btn small" data-use="${esc(g.code)}">${t('use_in_tx')}</button>${edits}</div></div></article>`;
   }).join('') || `<p class="count">${t('no_match')}</p>`;
 }
 $('q').addEventListener('input', renderBrowse); $('filt').addEventListener('change', renderBrowse);
 $('grid').addEventListener('click', e => {
   const u = e.target.closest('[data-use]'), ed = e.target.closest('[data-edit]');
-  if (u) { const s = symbols.find(x => x.id === u.dataset.use); if (!s) return; if (input.length && input[input.length - 1] !== ' ') input.push(' '); input.push(...s.code); renderInput(); show('translate'); translate(); }
+  if (u) { const code = u.dataset.use; if (!code) return; if (input.length && input[input.length - 1] !== ' ') input.push(' '); input.push(...code); renderInput(); show('translate'); translate(); }
   if (ed) { loadForm(ed.dataset.edit); show('manage'); $('symForm').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 });
 
