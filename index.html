@@ -118,6 +118,9 @@ kbd{font-family:ui-monospace,Consolas,monospace;font-size:.76rem;border:1px soli
 .mopt[aria-pressed="true"]{background:var(--royal);border-color:var(--royal);color:var(--royal-ink)}
 .mhint{font-size:.82rem;color:var(--muted);margin:10px 0 0}
 .chip.sp{width:36px;align-self:stretch;border-style:dashed;background:transparent;box-shadow:none}
+.wgrp{display:flex;flex-wrap:nowrap;gap:8px;max-width:100%;min-width:0}
+.wgrp .chip{flex:0 1 66px;min-width:0;padding:10px 6px}
+.wgrp .chip .cg{width:100%;max-width:46px;height:auto}
 .empty{color:var(--muted);font-size:1.1rem}
 .go{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-top:18px}
 .result{margin-top:22px}
@@ -132,6 +135,7 @@ table{border-collapse:collapse;width:100%;font-size:1.05rem}
 th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
 th{font-family:var(--display);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 td .cells{flex-wrap:nowrap}
+td.tcell svg.line{display:block;max-width:min(46vw,420px);height:auto}
 td.dots{font-size:.92rem;color:var(--muted);white-space:nowrap}
 .pill{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
 .pill.ok{color:var(--ok)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--bad)}
@@ -193,7 +197,7 @@ footer{color:var(--muted);font-size:.82rem;text-align:center;padding-block:8px 2
 .uil{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:99px;padding:5px 12px;font-family:var(--display);font-weight:500;font-size:.88rem;cursor:pointer}
 .uil:hover{border-color:var(--royal);color:var(--ink)}
 .uil[aria-pressed="true"]{background:var(--royal);border-color:var(--royal);color:var(--royal-ink)}
-@media (max-width:600px){.topright{align-items:stretch;width:100%}.uilang{justify-content:flex-start}}
+@media (max-width:600px){.topright{align-items:stretch;width:100%}.uilang{justify-content:flex-start}nav.tabs{flex-wrap:nowrap}nav.tabs button{flex:1 1 auto;padding:9px 8px;white-space:nowrap}}
 /* learn */
 .learn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
 .learn .lead{grid-column:1/-1}
@@ -246,7 +250,9 @@ details.chart summary{cursor:pointer;font-family:var(--display);font-weight:600;
   .pad .preview{font-size:1rem;min-height:1.2em}
   .pad .btn{font-size:1rem;padding:10px 16px}
   .chip{padding:8px}
-  .chip .cg{width:30px;height:40px}
+  .wgrp{gap:5px}
+  .wgrp .chip{flex-basis:44px;padding:7px 4px}
+  .wgrp .chip .cg{max-width:30px}
   .chip.sp{width:24px}
   .answer{padding:20px}
   .band{padding-block:14px 64px}
@@ -900,11 +906,19 @@ function renderInput() {
   const w = $('inputwin'); w.classList.toggle('has', input.length > 0);
   $('selBar').hidden = !input.length;
   if (!input.length) { selected.clear(); w.innerHTML = '<span class="empty">' + t('empty_html') + '</span>'; renderSelBar(); return; }
-  w.innerHTML = input.map((c, i) => {
+  // cells of one symbol (between word spaces) are kept together on one line; they shrink to fit if needed
+  const chip = (c, i) => {
     const sel = selected.has(i);
     return c === ' ' ? `<button class="chip sp${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="${t('word_space')}${sel ? ', ' + t('selected_sfx') : ''}" title="${t('word_space')} · ${t('tap_select')}"></button>`
       : `<button class="chip${sel ? ' sel' : ''}" data-i="${i}" aria-pressed="${sel}" aria-label="${t('cell_aria', { d: dotsOf(c) })}${sel ? ', ' + t('selected_sfx') : ''}" title="${t('dots')} ${dotsOf(c)} · ${t('tap_select')}">${cellSVG(c, 54)}</button>`;
-  }).join('');
+  };
+  let html = '', group = '';
+  input.forEach((c, i) => {
+    if (c === ' ') { if (group) { html += `<span class="wgrp">${group}</span>`; group = ''; } html += chip(c, i); }
+    else group += chip(c, i);
+  });
+  if (group) html += `<span class="wgrp">${group}</span>`;
+  w.innerHTML = html;
   renderSelBar();
   if (liveTx && !inTx) translate();
 }
@@ -980,14 +994,14 @@ function translateNow() {
     if (s.syms && s.syms.length > 1) { const pick = Math.min(choice[si] || 0, s.syms.length - 1); shown += `<span class="alts"> (${s.syms.filter((_, k) => k !== pick).map(x => esc(vern(x, lang).text)).join(' / ')})</span>`; }
     sentence += (sentence && !isP && ui !== 'zh' ? ' ' : '') + shown;
     const vtext = s.syms ? s.syms.map(x => { const v = vern(x, lang); return v.ok ? esc(v.text) : `<i style="color:var(--warn)">${esc(x.english)}</i>`; }).join(' / ') : esc(piece);
-    rows += `<tr><td>${cellsSVG(s.code, 36)}</td><td class="dots">${esc(dotsStr(s.code))}</td><td>${en}</td><td><b>${vtext}</b></td><td>${status}</td></tr>`;
+    rows += `<tr><td class="tcell">${cellsLineSVG(s.code, 36)}</td>${ui !== 'en' ? `<td><b>${vtext}</b></td>` : ''}<td>${en}</td></tr>`;
   });
   let notes = '';
   if (ui !== 'en' && lang === 'E') notes += `<p class="note warn">${t('note_nodict')}</p>`;
   else if (missing) notes += `<p class="note warn">${t('note_missing', { n: missing })}</p>`;
   if (unknown) notes += `<p class="note bad">${t('note_unknown', { n: unknown })}</p>`;
   out.innerHTML = `<div class="answer"><span class="lang-badge">${esc(UI_LANGS[ui])}</span><p class="sentence" id="sentenceText">${sentence}</p>${multi ? `<div class="meanings"><p class="eyebrow">${t('several')}</p><ul>${multi}</ul><p class="mhint">${t('tap_meaning')}</p></div>` : ''}<button class="btn small copybtn" id="copyTx">${t('copy_tx')}</button></div>${notes ? `<div class="notes">${notes}</div>` : ''}
-    <div class="tablewrap"><table><thead><tr><th>${t('th_cells')}</th><th>${t('th_dots')}</th><th>${t('th_english')}</th><th>${esc(UI_LANGS[ui])}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    <div class="tablewrap"><table><thead><tr><th>${t('th_cells')}</th>${ui !== 'en' ? `<th>${esc(UI_LANGS[ui])}</th>` : ''}<th>${t('th_english')}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 // ================= selects & browse =================
