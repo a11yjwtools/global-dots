@@ -744,11 +744,13 @@
 1 [.]=| |4 -
 1 [?]=| |? -
 1 [ADAM]=8P--[O0 -
+1 [AGAINST]=Y3& -
 1 [ALIVE]=:S  -
 1 [ALL]=&XXXY -
 1 [AND]="WR1 -
 1 [ANGEL]=F=D -
 1 [ANIMAL]=@63Q -
+1 [ANXIOUS]=GA'A' -
 1 [ASSEMBLY HALL]=PCC?-==== -
 1 [ASK]=G33? -
 1 [BAD]=E' -
@@ -757,14 +759,18 @@
 1 [BEAUTIFUL]=@!ZA -
 1 [BETHEL]=PCC?-==== -
 1 [BIBLE]=E-I= -
+1 [BIRTH]=R-9 -
+1 [BLESSING]==EE -
+1 [BLESS]==EE -
 1 [BOOK]=E-I -
+1 [BORN]=R-9 -
 1 [BOY]=6 -
 1 [BUILDING]=PCC? -
 1 [CHANGE]=FE0 -
 1 [CHERISH]=$N -
 1 [CHILD]=2 -
+1 [CLOTHING]="71 -
 1 [COME]=[333 -
-1 [COMPLETE]=&XXXY -
 1 [CONGREGATION]=&XY-LLL-==== -
 1 [COURAGEOUS]=H=J -
 1 [DAUGHTER]=8 -
@@ -782,11 +788,15 @@
 1 [FAITH]=73G -
 1 [FALSE]=XX3XX -
 1 [FAMILY]=P-R-2 -
+1 [FIGHT]=Y3& -
+1 [FOCUS]=G& -
+1 [FOOD]=33G -
 1 [FOREVER]=;B333O333O333O -
 1 [FRUIT]=C?PCE7 -
 1 [FUTURE]=;B333O -
 1 [GIRL]=8 -
 1 [GIVE]=G-3C -
+1 [GOD]=GGGG -
 1 [GOOD]=9A -
 1 [GO]=333O -
 1 [GROUP]=&XY -
@@ -795,10 +805,13 @@
 1 [HEAVEN]=--CEIC -
 1 [HELP]=G-=- -
 1 [HOLY SPIRIT]=H=JEE -
+1 [HOME]=PCC? -
 1 [HONOR]=G3III -
 1 [HOUSE]=PCC? -
 1 [HOW MANY]=?# -
 1 [HOW]=?S: -
+1 [IDOL]=0101J -
+1 [IMAGE]=0101J -
 1 [IMPROVE]=-7= -
 1 [INFORM]=G33HH -
 1 [I]=L[ -
@@ -813,6 +826,7 @@
 1 [LEADER]=()() -
 1 [LEARN]=GCC[ -
 1 [LIFE]=:S -
+1 [LISTEN]=G& -
 1 [LIVE]=:S -
 1 [LOVE]=$N -
 1 [LONG AGO]=;B[333 -
@@ -835,6 +849,7 @@
 1 [PARADISE]=--[O@!ZA -
 1 [PAST]=;B[333 -
 1 [PAIN]="S -
+1 [PAY ATTENTION]=G& -
 1 [PEACE]=,-95-' -
 1 [PEOPLE]=LLL -
 1 [PERSON]=L -
@@ -850,7 +865,6 @@
 1 [PROPHESY]=G33&Y -
 1 [PROPHET]=LG33&Y -
 1 [PUBLISHER]=LG33HH -
-1 [RANSOM]=&3[O3Y -
 1 [RELY]=73G -
 1 [RESPECT]=G3III -
 1 [RESURRECTION]=,-6SL -
@@ -871,6 +885,7 @@
 1 [SOON]=;B5 -
 1 [SPEAK]=G33 -
 1 [STAR]=--@@@@ -
+1 [STRESS]=GA'A' -
 1 [STRONG]=H=J -
 1 [SUFFER]="S -
 1 [SUPPORT]=G-=- -
@@ -901,6 +916,9 @@
 1 [WISE]=GC[O -
 1 [WITH]="WR1 -
 1 [WOMAN]=R -
+1 [WORKER]=L,71,71 -
+1 [WORK]=,71,71 -
+1 [WORRY]=GA'A' -
 1 [WORSEN]==7- -
 1 [WRITE]=(111 -
 1 [YES]=5I -
